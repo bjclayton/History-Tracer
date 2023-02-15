@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import Helper.Constant;
+
 
 public class WindowsHistory extends HistoryView {
 
@@ -43,7 +45,7 @@ public class WindowsHistory extends HistoryView {
             query = "SELECT * FROM urls";
         }
 
-        urlDatabase = "C:\\Users\\%s\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\History";
+        urlDatabase = Constant.getBraveDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
@@ -77,7 +79,7 @@ public class WindowsHistory extends HistoryView {
             query = "SELECT * FROM urls";
         }
 
-        urlDatabase = "C:\\Users\\%s\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\History";
+        urlDatabase = Constant.getMEdgeDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
@@ -111,7 +113,7 @@ public class WindowsHistory extends HistoryView {
             query = "SELECT * FROM moz_places";
         }
 
-        urlDatabase = "C:\\Users\\%s\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\8i3ldvjt.default-release\\places.sqlite";
+        urlDatabase = Constant.getFirefoxDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
@@ -145,7 +147,7 @@ public class WindowsHistory extends HistoryView {
             query = "SELECT * FROM urls";
         }
 
-        urlDatabase = "C:\\Users\\%s\\AppData\\Roaming\\Opera Software\\Opera Stable\\History";
+        urlDatabase = Constant.getOperaDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
@@ -179,7 +181,7 @@ public class WindowsHistory extends HistoryView {
             query = "SELECT * FROM urls";
         }
 
-        urlDatabase = "C:\\Users\\%s\\AppData\\Local\\Vivaldi\\User Data\\Default\\History";
+        urlDatabase = Constant.getVivaldiDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
@@ -213,7 +215,7 @@ public class WindowsHistory extends HistoryView {
             query = "SELECT * FROM urls";
         }
 
-        urlDatabase = "C:\\Users\\%s\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\History";
+        urlDatabase = Constant.getBraveDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();

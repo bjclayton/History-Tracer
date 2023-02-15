@@ -27,6 +27,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
+
 public abstract class HistoryView extends JFrame {
 
     // ------------------------------------ All variables -----------------------------------
@@ -216,12 +217,12 @@ public abstract class HistoryView extends JFrame {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Browser");
 
         // Create all node
-        DefaultMutableTreeNode chrome = new DefaultMutableTreeNode(new TreeNode("Chrome", "Chrome", "chrome.png"));
-        DefaultMutableTreeNode microsoftEdge = new DefaultMutableTreeNode(new TreeNode("Microsoft Edge", "Microsoft Edge", "microsoft.png"));
-        DefaultMutableTreeNode firefox = new DefaultMutableTreeNode(new TreeNode("Firefox", "Firefox", "firefox.png"));
-        DefaultMutableTreeNode opera = new DefaultMutableTreeNode(new TreeNode("Opera", "Opera", "opera.png"));
-        DefaultMutableTreeNode vivaldi = new DefaultMutableTreeNode(new TreeNode("Vivaldi", "Vivaldi", "vivaldi.png"));
-        DefaultMutableTreeNode brave = new DefaultMutableTreeNode(new TreeNode("Brave", "Brave", "brave.png"));
+        DefaultMutableTreeNode chrome = new DefaultMutableTreeNode(new TreeNode("Chrome", "Chrome", "images/chrome.png"));
+        DefaultMutableTreeNode microsoftEdge = new DefaultMutableTreeNode(new TreeNode("Microsoft Edge", "Microsoft Edge", "images/microsoft.png"));
+        DefaultMutableTreeNode firefox = new DefaultMutableTreeNode(new TreeNode("Firefox", "Firefox", "images/firefox.png"));
+        DefaultMutableTreeNode opera = new DefaultMutableTreeNode(new TreeNode("Opera", "Opera", "images/opera.png"));
+        DefaultMutableTreeNode vivaldi = new DefaultMutableTreeNode(new TreeNode("Vivaldi", "Vivaldi", "images/vivaldi.png"));
+        DefaultMutableTreeNode brave = new DefaultMutableTreeNode(new TreeNode("Brave", "Brave", "images/brave.png"));
 
         // Add node to the root
         root.add(chrome);
@@ -255,12 +256,24 @@ public abstract class HistoryView extends JFrame {
     public void decision(String browserSelected, String choice) throws IOException, SQLException {
         if (browserSelected.length() != 0) {
             switch (browserSelected.trim()) {
-                case "Chrome" -> ChromeHistory(choice);
-                case "Microsoft Edge" -> microsoftEdgeHistory(choice);
-                case "Firefox" -> firefoxHistory(choice);
-                case "Opera" -> operaHistory(choice);
-                case "Vivaldi" -> vivaldiHistory(choice);
-                case "Brave" -> braveHistory(choice);
+                case "Chrome":
+                    ChromeHistory(choice);
+                    break;
+                case "Microsoft Edge":
+                    microsoftEdgeHistory(choice);
+                    break;
+                case "Firefox":
+                    firefoxHistory(choice);
+                    break;
+                case "Opera":
+                    operaHistory(choice);
+                    break;
+                case "Vivaldi":
+                    vivaldiHistory(choice);
+                    break;
+                case "Brave":
+                    braveHistory(choice);
+                    break;
 
             }
         }
@@ -370,7 +383,7 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    //     Copy the database (To avoid an error like "database is locked")
+    // Copy the database (To avoid an error like "database is locked")
     public void copyDatabase(String path) throws IOException, SQLException {
         File source = new File(path);
         File destination = null;
@@ -453,9 +466,15 @@ public abstract class HistoryView extends JFrame {
 
         // check if the user want to sort by title, date or Visit count
         switch(choice1) {
-            case "Title" -> SortColNo = 1;
-            case "Date" -> SortColNo = 2;
-            case "Visit count" -> SortColNo = 3;
+            case "Title":
+                SortColNo = 1;
+                break;
+            case "Date":
+                SortColNo = 2;
+                break;
+            case "Visit count":
+                SortColNo = 3;
+                break;
         }
 
         TableRowSorter<TableModel> ColSort = new TableRowSorter<>(table.getModel());
@@ -532,7 +551,7 @@ public abstract class HistoryView extends JFrame {
             if (node.isLeaf()){
                 TreeNode treeNode = (TreeNode) node.getUserObject();
                 setText(treeNode.getValue());
-                ImageIcon icon = new ImageIcon(new ImageIcon("resources/"+treeNode.getIcon()).getImage()
+                ImageIcon icon = new ImageIcon(new ImageIcon("resources/images/"+treeNode.getIcon()).getImage()
                         .getScaledInstance(24, 24, Image.SCALE_DEFAULT));
                 setIcon(icon);
             }else {

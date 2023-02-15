@@ -60,7 +60,7 @@ public class PopupDetail  extends JFrame {
         setSize(500,400);
         setTitle("Detail");
 
-        Image icon = Toolkit.getDefaultToolkit().getImage("resources/History.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage("resources/images/History.png");
         setIconImage(icon); // Add icon
 
         setLocationRelativeTo(null);
