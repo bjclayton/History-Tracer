@@ -1,26 +1,23 @@
-
-import java.io.File;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+  
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 import Helper.Constant;
+import Models.Chrome;
+import Models.Linux;
+import Models.Windows;
 import controllers.LinuxHistory;
 import controllers.WindowsHistory;
 
 public class Main {
     private static String OSName;
-    private static String chromePath;
-    private static String firefoxPath;
-    private static String mEdgePath;
-    private static String operaPath;
-    private static String vivaldiPath;
-    private static String bravePath;
 
 
     public static void main(String[] args) {
@@ -28,61 +25,67 @@ public class Main {
         loadSettings();
 
         // Check the os and display his screen
-        if (OSName.contains("Windows")){
-        new WindowsHistory();
-        } else if (OSName.contains("Linux")) {
-        new LinuxHistory();
+        if (OSName.contains(Constant.getWindows().getName())){
+            new WindowsHistory();
+        } else if (OSName.contains(Constant.getLinux().getName())) {
+            new LinuxHistory();
         }else {
-        System.out.println("Other OS");
+            System.out.println("Other OS");
         }
     }
 
 
     static void loadSettings(){
-        try {
-            // creating a constructor of file class and parsing an XML file
-            File file = new File("appSettings.xml");
-
-            // an instance of factory that gives a document builder
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-            // an instance of builder to parse the specified xml file
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(file);
-            doc.getDocumentElement().normalize();
+        JSONObject settings;
+        try { 
+            settings = getInfo("windows");
+            Constant.setWindows(new Windows(settings.get("name").toString(), 
+                                            settings.get("title").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databaseName").toString()));
             
-            NodeList nodeList = doc.getElementsByTagName("database-url");
+            settings = getInfo("linux");
+            Constant.setLinux(new Linux(settings.get("name").toString(), 
+                                            settings.get("title").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databaseName").toString()));
 
-            // nodeList is not iterable, so we are using for loop
-            for (int itr = 0; itr < nodeList.getLength(); itr++) {
-                Node node = nodeList.item(itr);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) node;
-                    chromePath = eElement.getElementsByTagName("chromeDatabasePath")
-                    .item(0).getTextContent();
-                    mEdgePath = eElement.getElementsByTagName("mEdgeDatabasePath")
-                    .item(0).getTextContent();
-                    firefoxPath = eElement.getElementsByTagName("firefoxDatabasePath")
-                    .item(0).getTextContent();
-                    operaPath = eElement.getElementsByTagName("operaDatabasePath")
-                    .item(0).getTextContent();
-                    vivaldiPath = eElement.getElementsByTagName("vivaldiDatabasePath")
-                    .item(0).getTextContent();
-                    bravePath = eElement.getElementsByTagName("braveDatabasePath")
-                    .item(0).getTextContent();
+            settings = getInfo("chrome");
+            Constant.setChrome(new Chrome(settings.get("name").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databasePath").toString(), 
+                                            fromJsonAray(settings.get("sqlCommand")),
+                                            fromJsonAray(settings.get("siteFields")),
+                                            fromJsonAray(settings.get("downloadFields")),
+                                            fromJsonAray(settings.get("loginFields"))));
 
-                    Constant.setChromeDatabasePath(chromePath);
-                    Constant.setMEdgeDatabasePath(mEdgePath);
-                    Constant.setFirefoxDatabasePath(firefoxPath);
-                    Constant.setOperaDatabasePath(operaPath);
-                    Constant.setVivaldiDatabasePath(vivaldiPath);
-                    Constant.setBraveDatabasePath(bravePath);
 
-                }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+    private static JSONObject getInfo(String key) throws FileNotFoundException, IOException, ParseException{
+        // parsing file "appSettings.json"
+        Object obj = new JSONParser().parse(new FileReader("appSettings.json"));
+                    
+        // typecasting obj to JSONObject
+        JSONObject jsonObj = (JSONObject) obj;
+        JSONObject jsonObjKey = (JSONObject) jsonObj.get(key);
+
+        return jsonObjKey;
+    }
+
+    
+    private static ArrayList<String> fromJsonAray(Object jsonObj){
+        JSONArray jsonArray = (JSONArray) jsonObj;
+        ArrayList<String> array = new ArrayList<>();
+
+        for (Object element : jsonArray.toArray()) {
+            array.add((String) element);
+        }
+
+        return array;
+    }
 }

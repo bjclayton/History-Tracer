@@ -1,10 +1,17 @@
 package Helper;
 
+import Models.Chrome;
+import Models.Linux;
+import Models.Windows;
+
 public class Constant {
+    private static Chrome chrome;
+    private static Windows windows;
+    private static Linux linux;
     private static String chromeDatabasePath;
     private static String mEdgeDatabasePath;
     private static String firefoxDatabasePath;
-    private static String  operaDatabasePath;
+    private static String operaDatabasePath;
     private static String vivaldiDatabasePath;
     private static String braveDatabasePath;
 
@@ -54,5 +61,29 @@ public class Constant {
 
     public static void setBraveDatabasePath(String braveDatabasePath) {
         Constant.braveDatabasePath = braveDatabasePath;
+    }
+
+    public static Chrome getChrome() {
+        return chrome;
+    }
+
+    public static void setChrome(Chrome chrome) {
+        Constant.chrome = chrome;
+    }
+
+    public static Windows getWindows() {
+        return windows;
+    }
+
+    public static void setWindows(Windows windows) {
+        Constant.windows = windows;
+    }
+
+    public static Linux getLinux() {
+        return linux;
+    }
+
+    public static void setLinux(Linux linux) {
+        Constant.linux = linux;
     }
 }

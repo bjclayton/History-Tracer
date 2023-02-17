@@ -5,7 +5,6 @@ A class to manage a node on the tree
 each node will have an icon and a value
 */
 public class TreeNode {
-
     private String id, value, icon;
 
     public TreeNode(String id, String value, String icon) {

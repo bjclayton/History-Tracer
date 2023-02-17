@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
-
 import Helper.Constant;
 
 
@@ -18,14 +17,13 @@ public class WindowsHistory extends HistoryView {
     private static Statement stmt;
     private static ResultSet rs;
     private String username = System.getProperty("user.name");
-    private static String database = "jdbc:sqlite:windowsDatabase.sqlite";
     private static String urlDatabase, query;
 
 
     // -------------------- Method to open connection
     public static void setConn(){
             try {
-                Conn = DriverManager.getConnection(database);
+                Conn = DriverManager.getConnection(Constant.getWindows().getDatabaseName());
                 stmt = Conn.createStatement();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -40,21 +38,23 @@ public class WindowsHistory extends HistoryView {
         listInfo.clear();
 
         if(!Objects.equals(choice, "Display")){
-            query = "SELECT * FROM urls WHERE title LIKE '%" + choice + "%'";
+            // query = "SELECT * FROM urls WHERE title LIKE '%" + choice + "%'";
+            query = String.format(Constant.getChrome().getSqlCommand().get(1), choice);
         }else {
-            query = "SELECT * FROM urls";
+            query = Constant.getChrome().getSqlCommand().get(0);
         }
 
+
         urlDatabase = Constant.getBraveDatabasePath();
-        copyDatabase(String.format(urlDatabase, username));
+        copyDatabase(String.format(Constant.getChrome().getDatabasePath(), username));
         try {
             setConn();
             rs = stmt.executeQuery(query);
             while (rs.next()){
-                String url = rs.getString("url");
-                String title = rs.getString("title");
-                String visitTime = rs.getString("last_visit_time");
-                int visitCount = rs.getInt("visit_count");
+                String url = rs.getString(Constant.getChrome().getSiteFields().get(0));
+                String title = rs.getString(Constant.getChrome().getSiteFields().get(1));
+                String visitTime = rs.getString(Constant.getChrome().getSiteFields().get(2));
+                int visitCount = rs.getInt(Constant.getChrome().getSiteFields().get(3));
                 String user = username;
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);

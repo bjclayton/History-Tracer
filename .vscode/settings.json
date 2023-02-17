@@ -2,6 +2,10 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "libs/dom-2.3.0-jaxb-1.0.6.jar",
-        "libs/sqlite-jdbc-3.36.0.3.jar"
+        "libs/sqlite-jdbc-3.36.0.3.jar",
+        "libs/json-simple-1.1.1.jar",
+        "libs\\json-simple-1.1.1 (1).jar",
+        "libs/json-simple-1.1.1 (1).jar",
+        "libs/json-simple-1.1.jar"
     ]
 }

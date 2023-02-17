@@ -2,7 +2,6 @@ package Models;
 
 
 public class SiteHistory {
-
     private String url, title, visitTime, userProfile;
     private int visitCount;
 
