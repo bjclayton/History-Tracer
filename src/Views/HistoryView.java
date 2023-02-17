@@ -92,7 +92,7 @@ public abstract class HistoryView extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setTitle("History Explorer");
+        setTitle("History Tracer");
 
         Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getIcons().getIconApp());
         setIconImage(icon); // Add icon

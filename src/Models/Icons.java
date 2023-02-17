@@ -1,14 +1,15 @@
 package Models;
 
 public class Icons {
-    private String iconApp, iconCopy, iconSort, iconRefresh, iconSelectAll;
+    private String iconApp, iconCopy, iconSort, iconRefresh, iconSelectAll, loadGif;
 
-    public Icons(String iconApp, String iconCopy, String iconSort, String iconRefresh, String iconSelectAll) {
+    public Icons(String iconApp, String iconCopy, String iconSort, String iconRefresh, String iconSelectAll, String loadGif) {
         this.iconApp = iconApp;
         this.iconCopy = iconCopy;
         this.iconSort = iconSort;
         this.iconRefresh = iconRefresh;
         this.iconSelectAll = iconSelectAll;
+        this.loadGif = loadGif;
     }
 
     public String getIconApp() {
@@ -49,5 +50,13 @@ public class Icons {
 
     public void setIconSelectAll(String iconSelectAll) {
         this.iconSelectAll = iconSelectAll;
+    }
+
+    public String getLoadGif() {
+        return loadGif;
+    }
+
+    public void setLoadGif(String loadGif) {
+        this.loadGif = loadGif;
     }
 }
