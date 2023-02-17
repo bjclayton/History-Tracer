@@ -3,9 +3,11 @@ package Helper;
 import Models.Brave;
 import Models.Chrome;
 import Models.Firefox;
+import Models.Icons;
 import Models.Linux;
 import Models.MicrosoftEdge;
 import Models.Opera;
+import Models.Table;
 import Models.Vivaldi;
 import Models.Windows;
 
@@ -16,9 +18,10 @@ public class Constant {
     private static Opera opera;
     private static Vivaldi vivaldi;
     private static Brave brave;
-
     private static Windows windows;
     private static Linux linux;
+    private static Icons icons;
+    private static Table table;
 
     public static Chrome getChrome() {
         return chrome;
@@ -82,5 +85,21 @@ public class Constant {
 
     public static void setBrave(Brave brave) {
         Constant.brave = brave;
+    }
+
+    public static Icons getIcons() {
+        return icons;
+    }
+
+    public static void setIcons(Icons icons) {
+        Constant.icons = icons;
+    }
+
+    public static Table getTable() {
+        return table;
+    }
+
+    public static void setTable(Table table) {
+        Constant.table = table;
     }
 }

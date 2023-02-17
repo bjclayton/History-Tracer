@@ -10,6 +10,7 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import Helper.Constant;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -43,12 +44,17 @@ public abstract class HistoryView extends JFrame {
     private static ArrayList<SiteHistory> sites;
 
 
-    private final JButton copy = new JButton("Copy", new ImageIcon("resources/Copy.png"));
-    private final JButton refresh = new JButton("Refresh", new ImageIcon("resources/Refresh.png"));
-    private final JButton sellectAll = new JButton("Select All", new ImageIcon("resources/SelectAll.png"));
-    private final JButton sort = new JButton("Sort By", new ImageIcon("resources/Sort.png"));
+    private final JButton copy = new JButton("Copy", new ImageIcon(Constant.getIcons().getIconCopy()));
+    private final JButton refresh = new JButton("Refresh", new ImageIcon(Constant.getIcons().getIconRefresh()));
+    private final JButton sellectAll = new JButton("Select All", new ImageIcon(Constant.getIcons().getIconSelectAll()));
+    private final JButton sort = new JButton("Sort By", new ImageIcon(Constant.getIcons().getIconSort()));
 
-    final String[] colHeads = {"Url", "Title", "Visit Time", "Visit Count", "User Profile"};
+    final String[] colHeads = {Constant.getTable().getTableSite().get(0), 
+                                Constant.getTable().getTableSite().get(1),
+                                Constant.getTable().getTableSite().get(2),
+                                Constant.getTable().getTableSite().get(3), 
+                                Constant.getTable().getTableSite().get(4)};
+
     String[][] data = {{"", "", "", "", ""}};
     private String OSName = System.getProperty("os.name"); // get the OS name
 
@@ -88,7 +94,7 @@ public abstract class HistoryView extends JFrame {
         setLocationRelativeTo(null);
         setTitle("History Explorer");
 
-        Image icon = Toolkit.getDefaultToolkit().getImage("resources/History.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getIcons().getIconApp());
         setIconImage(icon); // Add icon
 
         Menu(); // Menu
@@ -138,7 +144,12 @@ public abstract class HistoryView extends JFrame {
     private void Display() {
         scrollTree = new JScrollPane(tree);
 
-        final String[] colHeads = {"Url", "Title", "Visit Time", "Visit Count", "User Profile"};
+        final String[] colHeads = {Constant.getTable().getTableSite().get(0), 
+                                    Constant.getTable().getTableSite().get(1),
+                                    Constant.getTable().getTableSite().get(2),
+                                    Constant.getTable().getTableSite().get(3), 
+                                    Constant.getTable().getTableSite().get(4)};
+
         String[][] data = {{"", "", "", "", ""}};
         table = new JTable(data, colHeads);
         scrollTable = new JScrollPane(table);
@@ -217,12 +228,12 @@ public abstract class HistoryView extends JFrame {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Browser");
 
         // Create all node
-        DefaultMutableTreeNode chrome = new DefaultMutableTreeNode(new TreeNode("Chrome", "Chrome", "images/chrome.png"));
-        DefaultMutableTreeNode microsoftEdge = new DefaultMutableTreeNode(new TreeNode("Microsoft Edge", "Microsoft Edge", "images/microsoft.png"));
-        DefaultMutableTreeNode firefox = new DefaultMutableTreeNode(new TreeNode("Firefox", "Firefox", "images/firefox.png"));
-        DefaultMutableTreeNode opera = new DefaultMutableTreeNode(new TreeNode("Opera", "Opera", "images/opera.png"));
-        DefaultMutableTreeNode vivaldi = new DefaultMutableTreeNode(new TreeNode("Vivaldi", "Vivaldi", "images/vivaldi.png"));
-        DefaultMutableTreeNode brave = new DefaultMutableTreeNode(new TreeNode("Brave", "Brave", "images/brave.png"));
+        DefaultMutableTreeNode chrome = new DefaultMutableTreeNode(new TreeNode(Constant.getChrome().getName(), Constant.getChrome().getName(), Constant.getChrome().getIconSrc()));
+        DefaultMutableTreeNode microsoftEdge = new DefaultMutableTreeNode(new TreeNode(Constant.getMicrosoftEdge().getName(), Constant.getMicrosoftEdge().getName(), Constant.getMicrosoftEdge().getIconSrc()));
+        DefaultMutableTreeNode firefox = new DefaultMutableTreeNode(new TreeNode(Constant.getFirefox().getName(), Constant.getFirefox().getName(), Constant.getFirefox().getIconSrc()));
+        DefaultMutableTreeNode opera = new DefaultMutableTreeNode(new TreeNode(Constant.getOpera().getName(), Constant.getOpera().getName(), Constant.getOpera().getIconSrc()));
+        DefaultMutableTreeNode vivaldi = new DefaultMutableTreeNode(new TreeNode(Constant.getVivaldi().getName(), Constant.getVivaldi().getName(), Constant.getVivaldi().getIconSrc()));
+        DefaultMutableTreeNode brave = new DefaultMutableTreeNode(new TreeNode(Constant.getBrave().getName(), Constant.getBrave().getName(), Constant.getBrave().getIconSrc()));
 
         // Add node to the root
         root.add(chrome);
@@ -274,7 +285,6 @@ public abstract class HistoryView extends JFrame {
                 case "Brave":
                     braveHistory(choice);
                     break;
-
             }
         }
     }
@@ -388,19 +398,18 @@ public abstract class HistoryView extends JFrame {
         File source = new File(path);
         File destination = null;
 
-        if (OSName.contains("Windows")){
+        if (OSName.contains(Constant.getWindows().getName())){
             destination = new File("windowsDatabase.sqlite");
             Files.deleteIfExists(Path.of("windowsDatabase.sqlite"));
             Files.copy(source.toPath(), destination.toPath());
 
-        } else if (Objects.equals(OSName, "Linux")) {
+        } else if (Objects.equals(OSName, Constant.getLinux().getName())) {
             Files.deleteIfExists(Path.of("linuxDatabase.sqlite"));
             destination = new File("linuxDatabase.sqlite");
             Files.copy(source.toPath(), destination.toPath());
         }else {
             System.out.println("Other OS");
         }
-
     }
 
 
@@ -538,7 +547,6 @@ public abstract class HistoryView extends JFrame {
                 }
             }
         });
-
     }
 
 
@@ -551,7 +559,7 @@ public abstract class HistoryView extends JFrame {
             if (node.isLeaf()){
                 TreeNode treeNode = (TreeNode) node.getUserObject();
                 setText(treeNode.getValue());
-                ImageIcon icon = new ImageIcon(new ImageIcon("resources/images/"+treeNode.getIcon()).getImage()
+                ImageIcon icon = new ImageIcon(new ImageIcon(treeNode.getIcon()).getImage()
                         .getScaledInstance(24, 24, Image.SCALE_DEFAULT));
                 setIcon(icon);
             }else {

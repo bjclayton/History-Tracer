@@ -1,6 +1,9 @@
 package Views;
 
 import javax.swing.*;
+
+import Helper.Constant;
+
 import java.awt.*;
 
 /* A class (popup) to display more detail about a line
@@ -60,13 +63,12 @@ public class PopupDetail  extends JFrame {
         setSize(500,400);
         setTitle("Detail");
 
-        Image icon = Toolkit.getDefaultToolkit().getImage("resources/images/History.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getIcons().getIconApp());
         setIconImage(icon); // Add icon
 
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
 
     public static void setTxtTitle(String text) {
         txtTitle.setText(text);

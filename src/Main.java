@@ -2,20 +2,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-  
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
-
 import Helper.Constant;
 import Models.Brave;
 import Models.Chrome;
 import Models.Firefox;
+import Models.Icons;
 import Models.Linux;
 import Models.MicrosoftEdge;
 import Models.Opera;
+import Models.Table;
+import Models.Vivaldi;
 import Models.Windows;
 import controllers.LinuxHistory;
 import controllers.WindowsHistory;
@@ -28,7 +27,7 @@ public class Main {
         OSName = System.getProperty("os.name"); // get the OS name
         loadSettings();
 
-        // Check the os and display his screen
+        // Check the os and display the screen
         if (OSName.contains(Constant.getWindows().getName())){
             new WindowsHistory();
         } else if (OSName.contains(Constant.getLinux().getName())) {
@@ -92,7 +91,7 @@ public class Main {
                                             fromJsonAray(settings.get("loginFields"))));
 
             settings = getInfo("vivaldi");
-            Constant.setOpera(new Opera(settings.get("name").toString(), 
+            Constant.setVivaldi(new Vivaldi(settings.get("name").toString(), 
                                             settings.get("iconSrc").toString(), 
                                             settings.get("databasePath").toString(), 
                                             fromJsonAray(settings.get("sqlCommand")),
@@ -108,7 +107,19 @@ public class Main {
                                             fromJsonAray(settings.get("siteFields")),
                                             fromJsonAray(settings.get("downloadFields")),
                                             fromJsonAray(settings.get("loginFields"))));
-            
+
+            settings = getInfo("icons");
+            Constant.setIcons(new Icons(settings.get("iconApp").toString(), 
+                                            settings.get("iconCopy").toString(), 
+                                            settings.get("iconSort").toString(), 
+                                            settings.get("iconRefresh").toString(),
+                                            settings.get("iconSelectAll").toString()));
+
+            settings = getInfo("table");
+            Constant.setTable(new Table(fromJsonAray(settings.get("tableSite")),
+                                        fromJsonAray(settings.get("tableDownload")),
+                                        fromJsonAray(settings.get("tableLogin"))));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
