@@ -10,8 +10,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
 import Helper.Constant;
+import Models.Brave;
 import Models.Chrome;
+import Models.Firefox;
 import Models.Linux;
+import Models.MicrosoftEdge;
+import Models.Opera;
 import Models.Windows;
 import controllers.LinuxHistory;
 import controllers.WindowsHistory;
@@ -59,7 +63,52 @@ public class Main {
                                             fromJsonAray(settings.get("downloadFields")),
                                             fromJsonAray(settings.get("loginFields"))));
 
+            settings = getInfo("microsoftEdge");
+            Constant.setMicrosoftEdge(new MicrosoftEdge(settings.get("name").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databasePath").toString(), 
+                                            fromJsonAray(settings.get("sqlCommand")),
+                                            fromJsonAray(settings.get("siteFields")),
+                                            fromJsonAray(settings.get("downloadFields")),
+                                            fromJsonAray(settings.get("loginFields"))));
 
+
+            settings = getInfo("firefox");
+            Constant.setFirefox(new Firefox(settings.get("name").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databasePath").toString(), 
+                                            fromJsonAray(settings.get("sqlCommand")),
+                                            fromJsonAray(settings.get("siteFields")),
+                                            fromJsonAray(settings.get("downloadFields")),
+                                            fromJsonAray(settings.get("loginFields"))));
+
+            settings = getInfo("opera");
+            Constant.setOpera(new Opera(settings.get("name").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databasePath").toString(), 
+                                            fromJsonAray(settings.get("sqlCommand")),
+                                            fromJsonAray(settings.get("siteFields")),
+                                            fromJsonAray(settings.get("downloadFields")),
+                                            fromJsonAray(settings.get("loginFields"))));
+
+            settings = getInfo("vivaldi");
+            Constant.setOpera(new Opera(settings.get("name").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databasePath").toString(), 
+                                            fromJsonAray(settings.get("sqlCommand")),
+                                            fromJsonAray(settings.get("siteFields")),
+                                            fromJsonAray(settings.get("downloadFields")),
+                                            fromJsonAray(settings.get("loginFields"))));
+
+            settings = getInfo("brave");
+            Constant.setBrave(new Brave(settings.get("name").toString(), 
+                                            settings.get("iconSrc").toString(), 
+                                            settings.get("databasePath").toString(), 
+                                            fromJsonAray(settings.get("sqlCommand")),
+                                            fromJsonAray(settings.get("siteFields")),
+                                            fromJsonAray(settings.get("downloadFields")),
+                                            fromJsonAray(settings.get("loginFields"))));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

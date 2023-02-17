@@ -38,14 +38,13 @@ public class WindowsHistory extends HistoryView {
         listInfo.clear();
 
         if(!Objects.equals(choice, "Display")){
-            // query = "SELECT * FROM urls WHERE title LIKE '%" + choice + "%'";
             query = String.format(Constant.getChrome().getSqlCommand().get(1), choice);
         }else {
             query = Constant.getChrome().getSqlCommand().get(0);
         }
 
 
-        urlDatabase = Constant.getBraveDatabasePath();
+        urlDatabase = Constant.getChrome().getDatabasePath();
         copyDatabase(String.format(Constant.getChrome().getDatabasePath(), username));
         try {
             setConn();
@@ -74,21 +73,21 @@ public class WindowsHistory extends HistoryView {
         listInfo.clear();
 
         if(!Objects.equals(choice, "Display")){
-            query = "SELECT * FROM urls WHERE title LIKE '%" + choice + "%'";
+            query = String.format(Constant.getMicrosoftEdge().getSqlCommand().get(1), choice);
         }else {
-            query = "SELECT * FROM urls";
+            query = Constant.getMicrosoftEdge().getSqlCommand().get(0);
         }
 
-        urlDatabase = Constant.getMEdgeDatabasePath();
+        urlDatabase = Constant.getMicrosoftEdge().getDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
             rs = stmt.executeQuery(query);
             while (rs.next()){
-                String url = rs.getString("url");
-                String title = rs.getString("title");
-                String visitTime = rs.getString("last_visit_time");
-                int visitCount = rs.getInt("visit_count");
+                String url = rs.getString(Constant.getMicrosoftEdge().getSiteFields().get(0));
+                String title = rs.getString(Constant.getMicrosoftEdge().getSiteFields().get(1));
+                String visitTime = rs.getString(Constant.getMicrosoftEdge().getSiteFields().get(2));
+                int visitCount = rs.getInt(Constant.getMicrosoftEdge().getSiteFields().get(3));
                 String user = username;
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
@@ -108,21 +107,21 @@ public class WindowsHistory extends HistoryView {
         listInfo.clear();
 
         if(!Objects.equals(choice, "Display")){
-            query = "SELECT * FROM moz_places WHERE title LIKE '%" + choice + "%'";
+            query = String.format(Constant.getFirefox().getSqlCommand().get(1), choice);
         }else {
-            query = "SELECT * FROM moz_places";
+            query = Constant.getFirefox().getSqlCommand().get(0);
         }
 
-        urlDatabase = Constant.getFirefoxDatabasePath();
+        urlDatabase = Constant.getFirefox().getDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
             rs = stmt.executeQuery(query);
             while (rs.next()){
-                String url = rs.getString("url");
-                String title = rs.getString("title");
-                String visitTime = rs.getString("last_visit_date");
-                int visitCount = rs.getInt("visit_count");
+                String url = rs.getString(Constant.getFirefox().getSiteFields().get(0));
+                String title = rs.getString(Constant.getFirefox().getSiteFields().get(1));
+                String visitTime = rs.getString(Constant.getFirefox().getSiteFields().get(2));
+                int visitCount = rs.getInt(Constant.getFirefox().getSiteFields().get(3));
                 String user = username;
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
@@ -142,21 +141,21 @@ public class WindowsHistory extends HistoryView {
         listInfo.clear();
 
         if(!Objects.equals(choice, "Display")){
-            query = "SELECT * FROM urls WHERE title LIKE '%" + choice + "%'";
+            query = String.format(Constant.getOpera().getSqlCommand().get(1), choice);
         }else {
-            query = "SELECT * FROM urls";
+            query = Constant.getOpera().getSqlCommand().get(0);
         }
 
-        urlDatabase = Constant.getOperaDatabasePath();
+        urlDatabase = Constant.getOpera().getDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
             rs = stmt.executeQuery(query);
             while (rs.next()){
-                String url = rs.getString("url");
-                String title = rs.getString("title");
-                String visitTime = rs.getString("last_visit_time");
-                int visitCount = rs.getInt("visit_count");
+                String url = rs.getString(Constant.getOpera().getSiteFields().get(0));
+                String title = rs.getString(Constant.getOpera().getSiteFields().get(1));
+                String visitTime = rs.getString(Constant.getOpera().getSiteFields().get(2));
+                int visitCount = rs.getInt(Constant.getOpera().getSiteFields().get(3));
                 String user = username;
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
@@ -176,21 +175,21 @@ public class WindowsHistory extends HistoryView {
         listInfo.clear();
 
         if(!Objects.equals(choice, "Display")){
-            query = "SELECT * FROM urls WHERE title LIKE '%" + choice + "%'";
+            query = String.format(Constant.getVivaldi().getSqlCommand().get(1), choice);
         }else {
-            query = "SELECT * FROM urls";
+            query = Constant.getVivaldi().getSqlCommand().get(0);
         }
 
-        urlDatabase = Constant.getVivaldiDatabasePath();
+        urlDatabase = Constant.getVivaldi().getDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
             rs = stmt.executeQuery(query);
             while (rs.next()){
-                String url = rs.getString("url");
-                String title = rs.getString("title");
-                String visitTime = rs.getString("last_visit_time");
-                int visitCount = rs.getInt("visit_count");
+                String url = rs.getString(Constant.getVivaldi().getSiteFields().get(0));
+                String title = rs.getString(Constant.getVivaldi().getSiteFields().get(1));
+                String visitTime = rs.getString(Constant.getVivaldi().getSiteFields().get(2));
+                int visitCount = rs.getInt(Constant.getVivaldi().getSiteFields().get(3));
                 String user = username;
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
@@ -210,21 +209,21 @@ public class WindowsHistory extends HistoryView {
         listInfo.clear();
 
         if(!Objects.equals(choice, "Display")){
-            query = "SELECT * FROM urls WHERE title LIKE '%" + choice + "%'";
+            query = String.format(Constant.getBrave().getSqlCommand().get(1), choice);
         }else {
-            query = "SELECT * FROM urls";
+            query = Constant.getBrave().getSqlCommand().get(0);
         }
 
-        urlDatabase = Constant.getBraveDatabasePath();
+        urlDatabase = Constant.getBrave().getDatabasePath();
         copyDatabase(String.format(urlDatabase, username));
         try {
             setConn();
             rs = stmt.executeQuery(query);
             while (rs.next()){
-                String url = rs.getString("url");
-                String title = rs.getString("title");
-                String visitTime = rs.getString("last_visit_time");
-                int visitCount = rs.getInt("visit_count");
+                String url = rs.getString(Constant.getBrave().getSiteFields().get(0));
+                String title = rs.getString(Constant.getBrave().getSiteFields().get(1));
+                String visitTime = rs.getString(Constant.getBrave().getSiteFields().get(2));
+                int visitCount = rs.getInt(Constant.getBrave().getSiteFields().get(3));
                 String user = username;
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
