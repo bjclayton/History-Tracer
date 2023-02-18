@@ -43,8 +43,6 @@ public class SplashScreen extends JFrame{
         setVisible(true);
     }
 
-    
-
 
     private static JSONObject getInfo(String key) throws FileNotFoundException, IOException, ParseException{
         // parsing file "appSettings.json"
