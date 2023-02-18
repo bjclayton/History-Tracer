@@ -7,10 +7,10 @@ public class Main {
     private static String OSName;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
         SplashScreen splash = new SplashScreen();
         try {
-            Thread.sleep(10000);
+            Thread.sleep(3000);
             splash.dispose();
         } catch(Exception e) {
             e.printStackTrace();

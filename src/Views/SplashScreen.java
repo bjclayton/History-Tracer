@@ -2,6 +2,7 @@ package Views;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,34 +10,27 @@ import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
-import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import Helper.Constant;
-import Models.Brave;
-import Models.Chrome;
-import Models.Firefox;
-import Models.Icons;
-import Models.Linux;
-import Models.MicrosoftEdge;
-import Models.Opera;
-import Models.Table;
-import Models.Vivaldi;
-import Models.Windows;
+import Models.*;
 
 public class SplashScreen extends JFrame{
+    private String FILE_URL = "https://drive.google.com/file/d/18KZX2UqT6olXlw4dtqiWpwWw1up-8oCX/view?usp=share_link";
+    private String  File_NAME = "appSettings.json";
 
-    public SplashScreen(){
-        setSize(600, 400);
+    public SplashScreen() throws Throwable{
+        setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         setLocationRelativeTo(null);
         setTitle("History Tracer");
 
+        getContentPane().setBackground(Color.decode("#465f7e"));
+        setUndecorated(true);
          
         if(isConnected()){
-            downloadFile();
+            //downloadFile();
         }
 
         loadSettings();
@@ -44,29 +38,13 @@ public class SplashScreen extends JFrame{
         Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getIcons().getIconApp());
         setIconImage(icon); // Add icon
 
-        Icon imgIcon = new ImageIcon(Constant.getIcons().getLoadGif());
-        JLabel label = new JLabel(imgIcon);
-        label.setBounds(668, 43, 46, 14);
-        getContentPane().add(label);
+        add(new MainPane());
 
         setVisible(true);
     }
 
-    private void downloadFile(){
-        String urlStr = "https://drive.google.com/file/d/18KZX2UqT6olXlw4dtqiWpwWw1up-8oCX/view?usp=share_link";
-        
-        try {            
-            URL url = new URL(urlStr);
-            ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-            FileOutputStream fos = new FileOutputStream("appSettings.json");
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-            fos.close();
-            rbc.close();
+    
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static JSONObject getInfo(String key) throws FileNotFoundException, IOException, ParseException{
         // parsing file "appSettings.json"
@@ -191,6 +169,34 @@ public class SplashScreen extends JFrame{
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    public class MainPane extends JPanel {
+
+        public MainPane() {
+            setBorder(new EmptyBorder(100, 10, 10, 10));
+            setLayout(new GridBagLayout());
+            setBackground(Color.decode("#465f7e"));
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            gbc.anchor = GridBagConstraints.NORTH;
+
+            JLabel lblTitle = new JLabel("<html><h1><strong><i>History Tracer</i></strong></h1></html>");
+            lblTitle.setForeground(Color.BLACK);
+            add(lblTitle, gbc);
+
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+
+            JPanel labelPanel = new JPanel(new GridBagLayout());
+            Icon imgIcon = new ImageIcon(Constant.getIcons().getLoadGif());
+            labelPanel.add(new JLabel(imgIcon), gbc);
+
+            gbc.weighty = 1;
+            add(labelPanel, gbc);
         }
     }
 }
