@@ -2,6 +2,7 @@ package Helper;
 
 import Models.Brave;
 import Models.Chrome;
+import Models.Dashboard;
 import Models.Firefox;
 import Models.Icons;
 import Models.Linux;
@@ -22,6 +23,7 @@ public class Constant {
     private static Linux linux;
     private static Icons icons;
     private static Table table;
+    private static Dashboard dashboard;
 
     public static Chrome getChrome() {
         return chrome;
@@ -101,5 +103,13 @@ public class Constant {
 
     public static void setTable(Table table) {
         Constant.table = table;
+    }
+
+    public static Dashboard getDashboard() {
+        return dashboard;
+    }
+
+    public static void setDashboard(Dashboard dashboard) {
+        Constant.dashboard = dashboard;
     }
 }

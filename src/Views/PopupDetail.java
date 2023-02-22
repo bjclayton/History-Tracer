@@ -44,8 +44,6 @@ public class PopupDetail  extends JFrame {
         txtVisitCount = new JTextField();
         txtVisitCount.setBounds(170,215,300,25);
 
-
-
         panel = new JPanel(); // create a panel to add label and button
         panel.setLayout(null);
 

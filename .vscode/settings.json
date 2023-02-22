@@ -6,6 +6,10 @@
         "libs/json-simple-1.1.1.jar",
         "libs\\json-simple-1.1.1 (1).jar",
         "libs/json-simple-1.1.1 (1).jar",
-        "libs/json-simple-1.1.jar"
+        "libs/json-simple-1.1.jar",
+        "libs\\jcommon-1.0.23.jar",
+        "libs\\jfreechart-1.0.19.jar",
+        "libs/jcommon-1.0.23.jar",
+        "libs/jfreechart-1.0.19.jar"
     ]
 }

@@ -165,6 +165,14 @@ public class SplashScreen extends JFrame{
                                         fromJsonAray(settings.get("tableDownload")),
                                         fromJsonAray(settings.get("tableLogin"))));
 
+
+            settings = getInfo("dashboard");
+            Constant.setDashboard(new Dashboard(settings.get("name").toString(), 
+                                                settings.get("iconSrc").toString(), 
+                                                settings.get("databasePath").toString(),
+                                                fromJsonAray(settings.get("sqlCommand")),
+                                                fromJsonAray(settings.get("databasedFields"))));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -225,9 +225,10 @@ public abstract class HistoryView extends JFrame {
         getContentPane().add(new JScrollPane(tree)); // tree's JScrollPane
 
         // root of the tree
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Browser");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
 
         // Create all node
+        DefaultMutableTreeNode dashboard = new DefaultMutableTreeNode(new TreeNode(Constant.getDashboard().getName(), Constant.getDashboard().getName(), Constant.getDashboard().getIconSrc()));
         DefaultMutableTreeNode chrome = new DefaultMutableTreeNode(new TreeNode(Constant.getChrome().getName(), Constant.getChrome().getName(), Constant.getChrome().getIconSrc()));
         DefaultMutableTreeNode microsoftEdge = new DefaultMutableTreeNode(new TreeNode(Constant.getMicrosoftEdge().getName(), Constant.getMicrosoftEdge().getName(), Constant.getMicrosoftEdge().getIconSrc()));
         DefaultMutableTreeNode firefox = new DefaultMutableTreeNode(new TreeNode(Constant.getFirefox().getName(), Constant.getFirefox().getName(), Constant.getFirefox().getIconSrc()));
@@ -235,14 +236,21 @@ public abstract class HistoryView extends JFrame {
         DefaultMutableTreeNode vivaldi = new DefaultMutableTreeNode(new TreeNode(Constant.getVivaldi().getName(), Constant.getVivaldi().getName(), Constant.getVivaldi().getIconSrc()));
         DefaultMutableTreeNode brave = new DefaultMutableTreeNode(new TreeNode(Constant.getBrave().getName(), Constant.getBrave().getName(), Constant.getBrave().getIconSrc()));
 
+        // // Add Download and Login node
+        // DefaultMutableTreeNode download = new DefaultMutableTreeNode(new TreeNode("Downloads", "Downloads", "resources/images/iconsNode.png"));
+        // DefaultMutableTreeNode login = new DefaultMutableTreeNode(new TreeNode("Logins", "Logins", "resources/images/iconsNode.png"));
+
+        // chrome.add(download);
+        // chrome.add(login);
+
         // Add node to the root
+        root.add(dashboard);
         root.add(chrome);
         root.add(microsoftEdge);
         root.add(firefox);
         root.add(opera);
         root.add(vivaldi);
         root.add(brave);
-
 
         DefaultTreeModel defaultTree = new DefaultTreeModel(root); // add root to DefaultTreeModel
         tree.setModel(defaultTree);
@@ -284,6 +292,9 @@ public abstract class HistoryView extends JFrame {
                     break;
                 case "Brave":
                     braveHistory(choice);
+                    break;
+                default:
+                    new DashboardView();
                     break;
             }
         }
