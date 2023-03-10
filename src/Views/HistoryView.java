@@ -11,6 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import Helper.Constant;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -313,8 +314,7 @@ public abstract class HistoryView extends JFrame {
 
 
     // ------------------------------------------- Show data on JTable ---------------------------------------
-    protected void showDetails(ArrayList<SiteHistory> listInfo) {
-
+    protected void showDetails(ArrayList<SiteHistory> listInfo) throws SQLException {
         sites = listInfo; // Take a copy of listInfo
 
         String[][] data = {{"", "", "", "", ""}};

@@ -1,5 +1,7 @@
 package Helper;
 
+import java.util.ArrayList;
+
 import Models.Brave;
 import Models.Chrome;
 import Models.Dashboard;
@@ -8,6 +10,7 @@ import Models.Icons;
 import Models.Linux;
 import Models.MicrosoftEdge;
 import Models.Opera;
+import Models.SiteHistory;
 import Models.Table;
 import Models.Vivaldi;
 import Models.Windows;
@@ -24,6 +27,7 @@ public class Constant {
     private static Icons icons;
     private static Table table;
     private static Dashboard dashboard;
+    private static ArrayList<SiteHistory> listSites = new ArrayList<>();
 
     public static Chrome getChrome() {
         return chrome;
@@ -111,5 +115,13 @@ public class Constant {
 
     public static void setDashboard(Dashboard dashboard) {
         Constant.dashboard = dashboard;
+    }
+
+    public static ArrayList<SiteHistory> getListSites() {
+        return listSites;
+    }
+
+    public static void setListSites(ArrayList<SiteHistory> listSites) {
+        Constant.listSites = listSites;
     }
 }
