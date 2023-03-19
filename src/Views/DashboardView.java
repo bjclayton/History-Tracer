@@ -1,8 +1,6 @@
 package Views;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
-
 import Helper.Constant;
 import Helper.DashboardDatabase;
 import Models.SiteHistory;
@@ -40,7 +38,7 @@ public class DashboardView extends JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getDashboard().getIconSrc());
         setIconImage(icon); // Add icon
 
-        init(choice);
+        init(getChoice());
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -49,7 +47,7 @@ public class DashboardView extends JFrame {
 
     private void init(String choice) throws IOException, SQLException {
         this.getContentPane().setLayout(new GridBagLayout());
-        getMostvisitedSites(choice);
+        getMostvisitedSites();
 
         //Setup panel
         JFreeChart chartMostVisited = createChart(createDataset(choice), "Most Visited Sites");
@@ -114,10 +112,10 @@ public class DashboardView extends JFrame {
         return histogram;
     }
 
-    private static void getMostvisitedSites(String choice) throws IOException, SQLException{
+    private static void getMostvisitedSites() throws IOException, SQLException{
         mostVisited.clear();
         values = new double[2];
-        switch (choice) {
+        switch (getChoice()) {
             case "Chrome":
                 getTopFive(DashboardDatabase.ChromeHistory("Display"), mostVisited);
                 break;
@@ -172,6 +170,7 @@ public class DashboardView extends JFrame {
                 iconButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         choice= "Microsoft Edge";
+                        setChoice("Microsoft Edge");
                     }
                 });    
                 break;
@@ -219,5 +218,15 @@ public class DashboardView extends JFrame {
         iconButton.setHorizontalTextPosition(AbstractButton.LEADING); 
         iconButton.setMnemonic(KeyEvent.VK_I);
         return iconButton;
+    }
+
+
+    private static String getChoice(){
+        return choice;
+    }
+
+    
+    private static void setChoice(String newChoice){
+        choice = newChoice;
     }
 }
