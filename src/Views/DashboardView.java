@@ -14,31 +14,38 @@ import java.util.Collections;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.data.statistics.HistogramDataset;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
-import javax.swing.AbstractButton;
 
 
 public class DashboardView extends JFrame {
 
     private static ArrayList<SiteHistory> mostVisited = new ArrayList<>();
     private static double[] values;
-    private static String choice = "Chrome";
+    private static String choice = "";
 
 
     public DashboardView() throws IOException, SQLException{
         setTitle("Dashboard");
 
+        if(Constant.getBrowserSelected() == null){
+            choice = "None";
+        }else{
+            choice = Constant.getBrowserSelected();
+        }
+
         Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getDashboard().getIconSrc());
         setIconImage(icon); // Add icon
 
-        init(getChoice());
+        init(choice);
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -50,43 +57,25 @@ public class DashboardView extends JFrame {
         getMostvisitedSites();
 
         //Setup panel
-        JFreeChart chartMostVisited = createChart(createDataset(choice), "Most Visited Sites");
+        JFreeChart chartMostVisited = createChart(createDataset(choice));
         ChartPanel panelMostVisited = new ChartPanel(chartMostVisited);
 
-        JFreeChart chartLastWeek = createChart(createDataset(choice), "Last Week");
-        ChartPanel panelLastWeek = new ChartPanel(chartLastWeek);
+        JFreeChart barMostVisited = createBar(CategoryDataset(choice), "No_Date");
+        ChartPanel panelbar = new ChartPanel(barMostVisited);
+
+        JFreeChart dateMostVisited = createBar(CategoryDataset(choice), "Date");
+        ChartPanel paneldate = new ChartPanel(dateMostVisited);
         
-        JFreeChart chartTotalSites = createChart(createDataset(choice), "Total Sites");
-        ChartPanel panelTotalSites = new ChartPanel(chartTotalSites);  
         
-        JFreeChart hist = createHist();
-        ChartPanel panelHist = new ChartPanel(hist);  
-        
-        JPanel panelBtn = new JPanel();
-        panelBtn.add(createButton("Microsoft Edge"));
-        panelBtn.add(createButton("Firefox"));
-        panelBtn.add(createButton("Opera"));
-        panelBtn.add(createButton("Vivaldi"));
-        panelBtn.add(createButton("Brave"));
-        panelBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // panelBtn.setPreferredSize(new Dimension(100, 100));
-        // panelBtn.setMaximumSize(new Dimension(100, 100));
-        System.out.println(choice);
 
         this.getContentPane().add(panelMostVisited,  new GridBagConstraints(0, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
                 2, 2), 0, 0));
-        this.getContentPane().add(panelLastWeek,  new GridBagConstraints(1, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
+        this.getContentPane().add(panelbar,  new GridBagConstraints(1, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
                 2, 2), 0, 0));
-        this.getContentPane().add(panelTotalSites,  new GridBagConstraints(2, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
+        this.getContentPane().add(paneldate,  new GridBagConstraints(2, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
                 2, 2), 0, 0));
-        // //next row
-        this.getContentPane().add(panelHist,  new GridBagConstraints(0, 1, 3, 1, 1.0, 0.4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
-                2, 2), 0, 0));
-        
-        this.getContentPane().add(panelBtn,  new GridBagConstraints(0, 2, 3, 1, 1.0, 0.4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
-        2, 2), 0, 0));
 
-        this.setPreferredSize(new Dimension(900, 550));
+        this.setPreferredSize(new Dimension(1000, 550));
         this.pack();
     }
 
@@ -98,24 +87,79 @@ public class DashboardView extends JFrame {
         }
         return dataset;         
     }
+
+    private static DefaultCategoryDataset CategoryDataset(String choice) throws IOException, SQLException {        
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (SiteHistory site : mostVisited) {
+            dataset.setValue(site.getVisitCount(), "Visits", site.getTitle());
+        }
+        return dataset;         
+    }
      
-    private static JFreeChart createChart(PieDataset dataset, String title) {
-        JFreeChart chart = ChartFactory.createPieChart(title,  dataset, false, false, false);
+    private static JFreeChart createChart(PieDataset dataset) {
+        JFreeChart chart = ChartFactory.createPieChart("",  dataset, false, false, false);
         return chart;
     }
 
-    public static JFreeChart createHist() {
-        HistogramDataset dataset = new HistogramDataset();
-        dataset.addSeries("key", values, 10);
- 
-        JFreeChart histogram = ChartFactory.createHistogram("Histogram", "Site", "Frequency", dataset, PlotOrientation.VERTICAL, false, false, false);
-        return histogram;
+    private static JFreeChart createBar(DefaultCategoryDataset dataset, String style) {
+        if(style.equals("Date")){
+            JFreeChart chart = ChartFactory.createLineChart(
+                "", // Chart title
+                "Date",                         // X-axis label
+                "Number of Visits",             // Y-axis label
+                dataset,                        // Dataset
+                PlotOrientation.VERTICAL,       // Orientation
+                true,                           // Include legend
+                true,                           // Tooltips
+                false                           // URLs
+            );
+    
+            // Set the chart background color
+            chart.setBackgroundPaint(Color.WHITE);
+    
+            // Customize the plot
+            CategoryPlot plot = chart.getCategoryPlot();
+            plot.setBackgroundPaint(Color.WHITE);
+            plot.setDomainGridlinePaint(Color.GRAY);
+            plot.setRangeGridlinePaint(Color.GRAY);
+    
+            // Set the X-axis label to rotate 90 degrees
+            CategoryAxis xAxis = plot.getDomainAxis();
+            xAxis.setTickLabelFont(xAxis.getTickLabelFont().deriveFont(11f));
+            xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+    
+            return chart;
+        }
+
+        // Create the chart
+        JFreeChart chart = ChartFactory.createBarChart(
+            "",    // Chart title
+            "Website",                         // X-axis label
+            "Number of Visits",                // Y-axis label
+            dataset,                           // Dataset
+            PlotOrientation.VERTICAL,          // Orientation
+            true,                              // Include legend
+            true,                              // Tooltips
+            false                              // URLs
+        );
+
+        // Set the chart background color
+        chart.setBackgroundPaint(Color.WHITE);
+
+        // Customize the plot
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.GRAY);
+        plot.setRangeGridlinePaint(Color.GRAY);
+
+        return chart;
     }
+
 
     private static void getMostvisitedSites() throws IOException, SQLException{
         mostVisited.clear();
         values = new double[2];
-        switch (getChoice()) {
+        switch (choice) {
             case "Chrome":
                 getTopFive(DashboardDatabase.ChromeHistory("Display"), mostVisited);
                 break;
@@ -138,95 +182,30 @@ public class DashboardView extends JFrame {
     }
 
     private static void getTopFive(ArrayList<SiteHistory> dataFromDb, ArrayList<SiteHistory> topFive){
-        for (int i = 0; i < 5; i++) {
-            SiteHistory max =  Collections.max(dataFromDb, new SiteHistory.ComparatorVisitCount());
-            topFive.add(max);
-            dataFromDb.remove(max);
-        }
-
-        values = new double[dataFromDb.size()];
-        for (int i = 0; i < dataFromDb.size(); i++) {
-            values[i] = dataFromDb.get(i).getVisitCount();
-        }
-    }
-
-
-    private static JButton createButton(String texte){
-        ImageIcon arrowIcon = null;
-        JButton iconButton = null;
-        switch (texte) {
-            case "Chrome":
-                arrowIcon = new ImageIcon(Constant.getChrome().getIconSrc());
-                iconButton = new JButton(arrowIcon);
-                iconButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        choice= "Chrome";
-                    }
-                });
-                break;
-            case "Microsoft Edge":
-                arrowIcon = new ImageIcon(Constant.getMicrosoftEdge().getIconSrc());
-                iconButton = new JButton(arrowIcon);
-                iconButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        choice= "Microsoft Edge";
-                        setChoice("Microsoft Edge");
-                    }
-                });    
-                break;
-            case "Firefox":
-                arrowIcon = new ImageIcon(Constant.getFirefox().getIconSrc());
-                iconButton = new JButton(arrowIcon);
-                iconButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        choice= "Firefox";
-                    }
-                });      
-                break;
-            case "Opera":
-                arrowIcon = new ImageIcon(Constant.getOpera().getIconSrc());
-                iconButton = new JButton(arrowIcon);
-                iconButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        choice= "Opera";
-                    }
-                }); 
-                break;
-            case "Vivaldi":
-                arrowIcon = new ImageIcon(Constant.getVivaldi().getIconSrc());
-                iconButton = new JButton(arrowIcon);
-                iconButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        choice= "Vivaldi";
-                    }
-                });  
-                break;
-            case "Brave":
-                arrowIcon = new ImageIcon(Constant.getBrave().getIconSrc());
-                iconButton = new JButton(arrowIcon);
-                iconButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        choice= "Brave";
-                    }
-                }); 
-                break;
-        }
+        if(dataFromDb.size() >= 5){
+            for (int i = 0; i < 5; i++) {
+                SiteHistory max =  Collections.max(dataFromDb, new SiteHistory.ComparatorVisitCount());
+                topFive.add(max);
+                dataFromDb.remove(max);
+            }
         
-        iconButton.setText(texte);
-        iconButton.setToolTipText(texte+" Statistics");
-        iconButton.setVerticalTextPosition(AbstractButton.CENTER);
-        iconButton.setHorizontalTextPosition(AbstractButton.LEADING); 
-        iconButton.setMnemonic(KeyEvent.VK_I);
-        return iconButton;
-    }
 
+            values = new double[dataFromDb.size()];
+            for (int i = 0; i < dataFromDb.size(); i++) {
+                values[i] = dataFromDb.get(i).getVisitCount();
+            }
+        }else{
+            for (int i = 0; i < dataFromDb.size(); i++) {
+                SiteHistory max =  Collections.max(dataFromDb, new SiteHistory.ComparatorVisitCount());
+                topFive.add(max);
+                dataFromDb.remove(max);
+            }
+        
 
-    private static String getChoice(){
-        return choice;
-    }
-
-    
-    private static void setChoice(String newChoice){
-        choice = newChoice;
+            values = new double[dataFromDb.size()];
+            for (int i = 0; i < dataFromDb.size(); i++) {
+                values[i] = dataFromDb.get(i).getVisitCount();
+            }
+        }
     }
 }

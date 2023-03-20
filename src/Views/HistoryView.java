@@ -269,6 +269,7 @@ public abstract class HistoryView extends JFrame {
             return;
 
         browserSelected = nodeSelected;
+        Constant.setBrowserSelected(browserSelected);
         decision(browserSelected, "Display");
     }
 

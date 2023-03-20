@@ -28,6 +28,7 @@ public class Constant {
     private static Table table;
     private static Dashboard dashboard;
     private static ArrayList<SiteHistory> listSites = new ArrayList<>();
+    private static String browserSelected;
 
     public static Chrome getChrome() {
         return chrome;
@@ -123,5 +124,15 @@ public class Constant {
 
     public static void setListSites(ArrayList<SiteHistory> listSites) {
         Constant.listSites = listSites;
+    }
+
+    public static String getBrowserSelected() {
+        return browserSelected;
+    }
+
+    public static void setBrowserSelected(String browserSelected) {
+        if(!browserSelected.equals("Dashboard")){
+            Constant.browserSelected = browserSelected;
+        }
     }
 }
