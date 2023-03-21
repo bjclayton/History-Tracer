@@ -25,10 +25,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-
 
 public class DashboardView extends JFrame {
 
@@ -36,13 +32,12 @@ public class DashboardView extends JFrame {
     private static double[] values;
     private static String choice = "";
 
-
-    public DashboardView() throws IOException, SQLException{
+    public DashboardView() throws IOException, SQLException {
         setTitle("Dashboard");
 
-        if(Constant.getBrowserSelected() == null){
+        if (Constant.getBrowserSelected() == null) {
             choice = "None";
-        }else{
+        } else {
             choice = Constant.getBrowserSelected();
         }
 
@@ -55,12 +50,11 @@ public class DashboardView extends JFrame {
         setVisible(true);
     }
 
-
     private void init(String choice) throws IOException, SQLException {
         this.getContentPane().setLayout(new GridBagLayout());
         getMostvisitedSites();
 
-        //Setup panel
+        // Setup panel
         JFreeChart chartMostVisited = createChart(createDataset(choice));
         ChartPanel panelMostVisited = new ChartPanel(chartMostVisited);
 
@@ -69,89 +63,96 @@ public class DashboardView extends JFrame {
 
         JFreeChart dateMostVisited = createBar(CategoryDataset(choice, "Date"), "Date");
         ChartPanel paneldate = new ChartPanel(dateMostVisited);
-        
-        
 
-        this.getContentPane().add(panelMostVisited,  new GridBagConstraints(0, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
-                2, 2), 0, 0));
-        this.getContentPane().add(panelbar,  new GridBagConstraints(1, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
-                2, 2), 0, 0));
-        this.getContentPane().add(paneldate,  new GridBagConstraints(2, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2,
-                2, 2), 0, 0));
+        this.getContentPane().add(panelMostVisited,
+                new GridBagConstraints(0, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+                        new Insets(2, 2,
+                                2, 2),
+                        0, 0));
+        this.getContentPane().add(panelbar,
+                new GridBagConstraints(1, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+                        new Insets(2, 2,
+                                2, 2),
+                        0, 0));
+        this.getContentPane().add(paneldate,
+                new GridBagConstraints(2, 0, 1, 1, 1.0, 0.6, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+                        new Insets(2, 2,
+                                2, 2),
+                        0, 0));
 
         this.setPreferredSize(new Dimension(1000, 550));
         this.pack();
     }
 
-
-    private static PieDataset createDataset(String choice) throws IOException, SQLException {        
-        DefaultPieDataset dataset = new DefaultPieDataset( );
+    private static PieDataset createDataset(String choice) throws IOException, SQLException {
+        DefaultPieDataset dataset = new DefaultPieDataset();
         for (SiteHistory site : mostVisited) {
-            dataset.setValue( site.getTitle() , site.getVisitCount());  
+            dataset.setValue(site.getTitle(), site.getVisitCount());
         }
-        return dataset;         
+        return dataset;
     }
 
-    private static DefaultCategoryDataset CategoryDataset(String choice, String style) throws IOException, SQLException {  
-        if(style.equals("Date")){
+    private static DefaultCategoryDataset CategoryDataset(String choice, String style)
+            throws IOException, SQLException {
+        if (style.equals("Date")) {
             DefaultCategoryDataset dataset = new DefaultCategoryDataset();
             for (Entry<String, Integer> e : getTopFiveDate(Constant.getDates()).entrySet()) {
                 dataset.setValue(e.getValue(), "Visits", e.getKey());
             }
-            return dataset; 
-        }       
+            return dataset;
+        }
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            for (SiteHistory site : mostVisited) {
-                dataset.setValue(site.getVisitCount(), "Visits", site.getTitle());
-            }
-            return dataset;        
+        for (SiteHistory site : mostVisited) {
+            dataset.setValue(site.getVisitCount(), "Visits", site.getTitle());
+        }
+        return dataset;
     }
-     
+
     private static JFreeChart createChart(PieDataset dataset) {
-        JFreeChart chart = ChartFactory.createPieChart("",  dataset, false, false, false);
+        JFreeChart chart = ChartFactory.createPieChart("", dataset, false, false, false);
         return chart;
     }
 
     private static JFreeChart createBar(DefaultCategoryDataset dataset, String style) {
-        if(style.equals("Date")){
+        if (style.equals("Date")) {
             JFreeChart chart = ChartFactory.createLineChart(
-                "", // Chart title
-                "Date",                         // X-axis label
-                "Number of Visits",             // Y-axis label
-                dataset,                        // Dataset
-                PlotOrientation.VERTICAL,       // Orientation
-                true,                           // Include legend
-                true,                           // Tooltips
-                false                           // URLs
+                    "", // Chart title
+                    "Date", // X-axis label
+                    "Number of Visits", // Y-axis label
+                    dataset, // Dataset
+                    PlotOrientation.VERTICAL, // Orientation
+                    true, // Include legend
+                    true, // Tooltips
+                    false // URLs
             );
-    
+
             // Set the chart background color
             chart.setBackgroundPaint(Color.WHITE);
-    
+
             // Customize the plot
             CategoryPlot plot = chart.getCategoryPlot();
             plot.setBackgroundPaint(Color.WHITE);
             plot.setDomainGridlinePaint(Color.GRAY);
             plot.setRangeGridlinePaint(Color.GRAY);
-    
+
             // Set the X-axis label to rotate 90 degrees
             CategoryAxis xAxis = plot.getDomainAxis();
             xAxis.setTickLabelFont(xAxis.getTickLabelFont().deriveFont(11f));
             xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-    
+
             return chart;
         }
 
         // Create the chart
         JFreeChart chart = ChartFactory.createBarChart(
-            "",    // Chart title
-            "Website",                         // X-axis label
-            "Number of Visits",                // Y-axis label
-            dataset,                           // Dataset
-            PlotOrientation.VERTICAL,          // Orientation
-            true,                              // Include legend
-            true,                              // Tooltips
-            false                              // URLs
+                "", // Chart title
+                "Website", // X-axis label
+                "Number of Visits", // Y-axis label
+                dataset, // Dataset
+                PlotOrientation.VERTICAL, // Orientation
+                true, // Include legend
+                true, // Tooltips
+                false // URLs
         );
 
         // Set the chart background color
@@ -166,8 +167,7 @@ public class DashboardView extends JFrame {
         return chart;
     }
 
-
-    private static void getMostvisitedSites() throws IOException, SQLException{
+    private static void getMostvisitedSites() throws IOException, SQLException {
         mostVisited.clear();
         values = new double[2];
         switch (choice) {
@@ -192,26 +192,24 @@ public class DashboardView extends JFrame {
         }
     }
 
-    private static void getTopFive(ArrayList<SiteHistory> dataFromDb, ArrayList<SiteHistory> topFive){
-        if(dataFromDb.size() >= 5){
+    private static void getTopFive(ArrayList<SiteHistory> dataFromDb, ArrayList<SiteHistory> topFive) {
+        if (dataFromDb.size() >= 5) {
             for (int i = 0; i < 5; i++) {
-                SiteHistory max =  Collections.max(dataFromDb, new SiteHistory.ComparatorVisitCount());
+                SiteHistory max = Collections.max(dataFromDb, new SiteHistory.ComparatorVisitCount());
                 topFive.add(max);
                 dataFromDb.remove(max);
             }
-        
 
             values = new double[dataFromDb.size()];
             for (int i = 0; i < dataFromDb.size(); i++) {
                 values[i] = dataFromDb.get(i).getVisitCount();
             }
-        }else{
+        } else {
             for (int i = 0; i < dataFromDb.size(); i++) {
-                SiteHistory max =  Collections.max(dataFromDb, new SiteHistory.ComparatorVisitCount());
+                SiteHistory max = Collections.max(dataFromDb, new SiteHistory.ComparatorVisitCount());
                 topFive.add(max);
                 dataFromDb.remove(max);
             }
-        
 
             values = new double[dataFromDb.size()];
             for (int i = 0; i < dataFromDb.size(); i++) {
@@ -220,20 +218,18 @@ public class DashboardView extends JFrame {
         }
     }
 
-
-
-    private static Map<String, Integer> getTopFiveDate(HashMap<String, Integer> data){
+    private static Map<String, Integer> getTopFiveDate(HashMap<String, Integer> data) {
         ArrayList<Map.Entry<String, Integer>> entryList = new ArrayList<>(data.entrySet());
         Collections.sort(entryList, Collections.reverseOrder(Map.Entry.comparingByValue()));
         Map<String, Integer> highestPairs = new LinkedHashMap<>();
 
         // get the highest five pairs
-        if(data.size() >= 5){
+        if (data.size() >= 5) {
             for (int i = 0; i < 5 && i < entryList.size(); i++) {
                 Map.Entry<String, Integer> entry = entryList.get(i);
                 highestPairs.put(entry.getKey(), entry.getValue());
             }
-        }else{
+        } else {
             for (int i = 0; i < entryList.size(); i++) {
                 Map.Entry<String, Integer> entry = entryList.get(i);
                 highestPairs.put(entry.getKey(), entry.getValue());

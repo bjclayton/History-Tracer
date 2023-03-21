@@ -6,24 +6,23 @@ import controllers.WindowsHistory;
 public class Main {
     private static String OSName;
 
-
     public static void main(String[] args) throws Throwable {
         SplashScreen splash = new SplashScreen();
         try {
             Thread.sleep(3000);
             splash.dispose();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         OSName = System.getProperty("os.name"); // get the OS name
 
         // Check the os and display the screen
-        if (OSName.contains(Constant.getWindows().getName())){
+        if (OSName.contains(Constant.getWindows().getName())) {
             new WindowsHistory();
         } else if (OSName.contains(Constant.getLinux().getName())) {
             new LinuxHistory();
-        }else {
+        } else {
             System.out.println("Other OS");
         }
     }

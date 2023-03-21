@@ -16,17 +16,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import Helper.Constant;
 import Models.*;
 
-public class SplashScreen extends JFrame{
-    // private String FILE_URL = "https://drive.google.com/file/d/1HpVioircqoo0CjNNTLKqdmfdTvXuDyJL/view?usp=share_link";
-    private String  File_NAME = "appSettings.json";
+public class SplashScreen extends JFrame {
+    private static String File_NAME = "appSettings.json";
 
-    public SplashScreen() throws Throwable{
+    public SplashScreen() throws Throwable {
         setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -35,8 +33,8 @@ public class SplashScreen extends JFrame{
 
         getContentPane().setBackground(Color.decode("#465f7e"));
         setUndecorated(true);
-         
-        if(isConnected()){
+
+        if (isConnected()) {
             downloadFileFromUrl();
         }
 
@@ -50,11 +48,10 @@ public class SplashScreen extends JFrame{
         setVisible(true);
     }
 
-
-    private static JSONObject getInfo(String key) throws FileNotFoundException, IOException, ParseException{
+    private static JSONObject getInfo(String key) throws FileNotFoundException, IOException, ParseException {
         // parsing file "appSettings.json"
-        Object obj = new JSONParser().parse(new FileReader("appSettings.json"));
-                    
+        Object obj = new JSONParser().parse(new FileReader(File_NAME));
+
         // typecasting obj to JSONObject
         JSONObject jsonObj = (JSONObject) obj;
         JSONObject jsonObjKey = (JSONObject) jsonObj.get(key);
@@ -62,8 +59,7 @@ public class SplashScreen extends JFrame{
         return jsonObjKey;
     }
 
-    
-    private static ArrayList<String> fromJsonAray(Object jsonObj){
+    private static ArrayList<String> fromJsonAray(Object jsonObj) {
         JSONArray jsonArray = (JSONArray) jsonObj;
         ArrayList<String> array = new ArrayList<>();
 
@@ -74,137 +70,130 @@ public class SplashScreen extends JFrame{
         return array;
     }
 
-
-    private boolean isConnected(){
+    private boolean isConnected() {
         try {
             URL url = new URL("https://www.google.com");
             URLConnection connection = url.openConnection();
             connection.connect();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
 
         return true;
     }
 
-
-    private static void loadSettings(){
+    private static void loadSettings() {
         JSONObject settings;
-        try { 
+        try {
             settings = getInfo("windows");
-            Constant.setWindows(new Windows(settings.get("name").toString(), 
-                                            settings.get("title").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databaseName").toString()));
-            
+            Constant.setWindows(new Windows(settings.get("name").toString(),
+                    settings.get("title").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databaseName").toString()));
+
             settings = getInfo("linux");
-            Constant.setLinux(new Linux(settings.get("name").toString(), 
-                                            settings.get("title").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databaseName").toString()));
+            Constant.setLinux(new Linux(settings.get("name").toString(),
+                    settings.get("title").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databaseName").toString()));
 
             settings = getInfo("chrome");
-            Constant.setChrome(new Chrome(settings.get("name").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databasePath").toString(), 
-                                            fromJsonAray(settings.get("sqlCommand")),
-                                            fromJsonAray(settings.get("siteFields")),
-                                            fromJsonAray(settings.get("downloadFields")),
-                                            fromJsonAray(settings.get("loginFields"))));
+            Constant.setChrome(new Chrome(settings.get("name").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databasePath").toString(),
+                    fromJsonAray(settings.get("sqlCommand")),
+                    fromJsonAray(settings.get("siteFields")),
+                    fromJsonAray(settings.get("downloadFields")),
+                    fromJsonAray(settings.get("loginFields"))));
 
             settings = getInfo("microsoftEdge");
-            Constant.setMicrosoftEdge(new MicrosoftEdge(settings.get("name").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databasePath").toString(), 
-                                            fromJsonAray(settings.get("sqlCommand")),
-                                            fromJsonAray(settings.get("siteFields")),
-                                            fromJsonAray(settings.get("downloadFields")),
-                                            fromJsonAray(settings.get("loginFields"))));
-
+            Constant.setMicrosoftEdge(new MicrosoftEdge(settings.get("name").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databasePath").toString(),
+                    fromJsonAray(settings.get("sqlCommand")),
+                    fromJsonAray(settings.get("siteFields")),
+                    fromJsonAray(settings.get("downloadFields")),
+                    fromJsonAray(settings.get("loginFields"))));
 
             settings = getInfo("firefox");
-            Constant.setFirefox(new Firefox(settings.get("name").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databasePath").toString(), 
-                                            fromJsonAray(settings.get("sqlCommand")),
-                                            fromJsonAray(settings.get("siteFields")),
-                                            fromJsonAray(settings.get("downloadFields")),
-                                            fromJsonAray(settings.get("loginFields"))));
+            Constant.setFirefox(new Firefox(settings.get("name").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databasePath").toString(),
+                    fromJsonAray(settings.get("sqlCommand")),
+                    fromJsonAray(settings.get("siteFields")),
+                    fromJsonAray(settings.get("downloadFields")),
+                    fromJsonAray(settings.get("loginFields"))));
 
             settings = getInfo("opera");
-            Constant.setOpera(new Opera(settings.get("name").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databasePath").toString(), 
-                                            fromJsonAray(settings.get("sqlCommand")),
-                                            fromJsonAray(settings.get("siteFields")),
-                                            fromJsonAray(settings.get("downloadFields")),
-                                            fromJsonAray(settings.get("loginFields"))));
+            Constant.setOpera(new Opera(settings.get("name").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databasePath").toString(),
+                    fromJsonAray(settings.get("sqlCommand")),
+                    fromJsonAray(settings.get("siteFields")),
+                    fromJsonAray(settings.get("downloadFields")),
+                    fromJsonAray(settings.get("loginFields"))));
 
             settings = getInfo("vivaldi");
-            Constant.setVivaldi(new Vivaldi(settings.get("name").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databasePath").toString(), 
-                                            fromJsonAray(settings.get("sqlCommand")),
-                                            fromJsonAray(settings.get("siteFields")),
-                                            fromJsonAray(settings.get("downloadFields")),
-                                            fromJsonAray(settings.get("loginFields"))));
+            Constant.setVivaldi(new Vivaldi(settings.get("name").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databasePath").toString(),
+                    fromJsonAray(settings.get("sqlCommand")),
+                    fromJsonAray(settings.get("siteFields")),
+                    fromJsonAray(settings.get("downloadFields")),
+                    fromJsonAray(settings.get("loginFields"))));
 
             settings = getInfo("brave");
-            Constant.setBrave(new Brave(settings.get("name").toString(), 
-                                            settings.get("iconSrc").toString(), 
-                                            settings.get("databasePath").toString(), 
-                                            fromJsonAray(settings.get("sqlCommand")),
-                                            fromJsonAray(settings.get("siteFields")),
-                                            fromJsonAray(settings.get("downloadFields")),
-                                            fromJsonAray(settings.get("loginFields"))));
+            Constant.setBrave(new Brave(settings.get("name").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databasePath").toString(),
+                    fromJsonAray(settings.get("sqlCommand")),
+                    fromJsonAray(settings.get("siteFields")),
+                    fromJsonAray(settings.get("downloadFields")),
+                    fromJsonAray(settings.get("loginFields"))));
 
             settings = getInfo("icons");
-            Constant.setIcons(new Icons(settings.get("iconApp").toString(), 
-                                            settings.get("iconCopy").toString(), 
-                                            settings.get("iconSort").toString(), 
-                                            settings.get("iconRefresh").toString(),
-                                            settings.get("iconSelectAll").toString(),
-                                            settings.get("loadGif").toString()));
+            Constant.setIcons(new Icons(settings.get("iconApp").toString(),
+                    settings.get("iconCopy").toString(),
+                    settings.get("iconSort").toString(),
+                    settings.get("iconRefresh").toString(),
+                    settings.get("iconSelectAll").toString(),
+                    settings.get("loadGif").toString()));
 
             settings = getInfo("table");
             Constant.setTable(new Table(fromJsonAray(settings.get("tableSite")),
-                                        fromJsonAray(settings.get("tableDownload")),
-                                        fromJsonAray(settings.get("tableLogin"))));
-
+                    fromJsonAray(settings.get("tableDownload")),
+                    fromJsonAray(settings.get("tableLogin"))));
 
             settings = getInfo("dashboard");
-            Constant.setDashboard(new Dashboard(settings.get("name").toString(), 
-                                                settings.get("iconSrc").toString(), 
-                                                settings.get("databasePath").toString(),
-                                                fromJsonAray(settings.get("sqlCommand")),
-                                                fromJsonAray(settings.get("databasedFields"))));
+            Constant.setDashboard(new Dashboard(settings.get("name").toString(),
+                    settings.get("iconSrc").toString(),
+                    settings.get("databasePath").toString(),
+                    fromJsonAray(settings.get("sqlCommand")),
+                    fromJsonAray(settings.get("databasedFields"))));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
     public static void downloadFileFromUrl() throws IOException {
         String fileID = "1HpVioircqoo0CjNNTLKqdmfdTvXuDyJL";
         String downloadURL = "https://drive.google.com/uc?id=" + fileID;
-        
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(downloadURL).openStream()))) {
             String line;
             FileWriter fileWriter = new FileWriter("appSettings.json");
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             while ((line = reader.readLine()) != null) {
-               bufferedWriter.write(line);
-               bufferedWriter.newLine();
+                bufferedWriter.write(line);
+                bufferedWriter.newLine();
             }
             bufferedWriter.close();
             fileWriter.close();
-         } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-         }
+        }
     }
-
 
     public class MainPane extends JPanel {
 
