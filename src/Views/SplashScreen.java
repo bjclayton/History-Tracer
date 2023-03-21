@@ -3,20 +3,27 @@ package Views;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
+
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import Helper.Constant;
 import Models.*;
 
 public class SplashScreen extends JFrame{
-    private String FILE_URL = "https://drive.google.com/file/d/18KZX2UqT6olXlw4dtqiWpwWw1up-8oCX/view?usp=share_link";
+    // private String FILE_URL = "https://drive.google.com/file/d/1HpVioircqoo0CjNNTLKqdmfdTvXuDyJL/view?usp=share_link";
     private String  File_NAME = "appSettings.json";
 
     public SplashScreen() throws Throwable{
@@ -30,7 +37,7 @@ public class SplashScreen extends JFrame{
         setUndecorated(true);
          
         if(isConnected()){
-            //downloadFile();
+            downloadFileFromUrl();
         }
 
         loadSettings();
@@ -176,6 +183,26 @@ public class SplashScreen extends JFrame{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static void downloadFileFromUrl() throws IOException {
+        String fileID = "1HpVioircqoo0CjNNTLKqdmfdTvXuDyJL";
+        String downloadURL = "https://drive.google.com/uc?id=" + fileID;
+        
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(downloadURL).openStream()))) {
+            String line;
+            FileWriter fileWriter = new FileWriter("appSettings.json");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            while ((line = reader.readLine()) != null) {
+               bufferedWriter.write(line);
+               bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+            fileWriter.close();
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
     }
 
 
