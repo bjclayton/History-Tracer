@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import Models.SiteHistory;
-
+import java.sql.Timestamp;
+import java.util.Date;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,6 +43,8 @@ public class DashboardDatabase {
     // ------------------------------------------- Search chrome history ---------------------------------------
     public static ArrayList<SiteHistory> ChromeHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
+        Constant.getDates().clear();
+        int numberVisitsByDate = 0;
 
         if(!Objects.equals(choice, "Display")){
             query = String.format(Constant.getChrome().getSqlCommand().get(1), choice);
@@ -64,6 +67,13 @@ public class DashboardDatabase {
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
                 listInfo.add(info);
+
+                if(Constant.getDates().containsKey(convertTime(visitTime))){
+                    numberVisitsByDate++;
+                    Constant.setDates(convertTime(visitTime), numberVisitsByDate);
+                }else{
+                    Constant.setDates(convertTime(visitTime), 0);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -77,6 +87,8 @@ public class DashboardDatabase {
     // ------------------------------------------- Search Microsoft Edge history ---------------------------------------
     public static ArrayList<SiteHistory>  microsoftEdgeHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
+        Constant.getDates().clear();
+        int numberVisitsByDate = 0;
 
         if(!Objects.equals(choice, "Display")){
             query = String.format(Constant.getMicrosoftEdge().getSqlCommand().get(1), choice);
@@ -98,6 +110,13 @@ public class DashboardDatabase {
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
                 listInfo.add(info);
+
+                if(Constant.getDates().containsKey(convertTime(visitTime))){
+                    numberVisitsByDate++;
+                    Constant.setDates(convertTime(visitTime), numberVisitsByDate);
+                }else{
+                    Constant.setDates(convertTime(visitTime), 0);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -111,6 +130,8 @@ public class DashboardDatabase {
     // ------------------------------------------- Search Firefox history ---------------------------------------
     public static ArrayList<SiteHistory>  firefoxHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
+        Constant.getDates().clear();
+        int numberVisitsByDate = 0;
 
         if(!Objects.equals(choice, "Display")){
             query = String.format(Constant.getFirefox().getSqlCommand().get(1), choice);
@@ -132,6 +153,13 @@ public class DashboardDatabase {
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
                 listInfo.add(info);
+
+                if(Constant.getDates().containsKey(convertTime(visitTime))){
+                    numberVisitsByDate++;
+                    Constant.setDates(convertTime(visitTime), numberVisitsByDate);
+                }else{
+                    Constant.setDates(convertTime(visitTime), 0);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -145,6 +173,8 @@ public class DashboardDatabase {
     // ------------------------------------------- Search Opera history ---------------------------------------
     public static ArrayList<SiteHistory>  operaHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
+        Constant.getDates().clear();
+        int numberVisitsByDate = 0;
 
         if(!Objects.equals(choice, "Display")){
             query = String.format(Constant.getOpera().getSqlCommand().get(1), choice);
@@ -166,6 +196,13 @@ public class DashboardDatabase {
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
                 listInfo.add(info);
+
+                if(Constant.getDates().containsKey(convertTime(visitTime))){
+                    numberVisitsByDate++;
+                    Constant.setDates(convertTime(visitTime), numberVisitsByDate);
+                }else{
+                    Constant.setDates(convertTime(visitTime), 0);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -179,6 +216,8 @@ public class DashboardDatabase {
     // ------------------------------------------- Search Vivaldi history ---------------------------------------
     public static ArrayList<SiteHistory>  vivaldiHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
+        Constant.getDates().clear();
+        int numberVisitsByDate = 0;
 
         if(!Objects.equals(choice, "Display")){
             query = String.format(Constant.getVivaldi().getSqlCommand().get(1), choice);
@@ -200,6 +239,13 @@ public class DashboardDatabase {
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
                 listInfo.add(info);
+
+                if(Constant.getDates().containsKey(convertTime(visitTime))){
+                    numberVisitsByDate++;
+                    Constant.setDates(convertTime(visitTime), numberVisitsByDate);
+                }else{
+                    Constant.setDates(convertTime(visitTime), 0);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -213,6 +259,8 @@ public class DashboardDatabase {
     // ------------------------------------------- Search Brave history ---------------------------------------
     public static ArrayList<SiteHistory>  braveHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
+        Constant.getDates().clear();
+        int numberVisitsByDate = 0;
 
         if(!Objects.equals(choice, "Display")){
             query = String.format(Constant.getBrave().getSqlCommand().get(1), choice);
@@ -234,6 +282,13 @@ public class DashboardDatabase {
 
                 SiteHistory info = new SiteHistory(url, title, visitTime, visitCount, user);
                 listInfo.add(info);
+
+                if(Constant.getDates().containsKey(convertTime(visitTime))){
+                    numberVisitsByDate++;
+                    Constant.setDates(convertTime(visitTime), numberVisitsByDate);
+                }else{
+                    Constant.setDates(convertTime(visitTime), 0);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -255,6 +310,7 @@ public class DashboardDatabase {
                 list.add(
                     new SiteHistory(rs.getString("url"), rs.getString("title"), rs.getInt("visit_count"))
                 );
+
             }  
         } catch (SQLException e) {  
             System.out.println(e.getMessage());  
@@ -270,6 +326,22 @@ public class DashboardDatabase {
             }
         }
         return false;
+    }
+
+     public static String convertTime(String date){
+        // Getting the current system time and passing it and passing the long value in the Date class
+        if(date != null){
+            Timestamp ts = new Timestamp(Long.parseLong(date));
+            Date newDate = new Date(ts.getTime());
+            String val = String.valueOf(newDate);
+            
+            String[] listDate = val.split(" ");
+            String valDateString = String.format("%s %s %s", listDate[0], listDate[2], listDate[2]);
+            
+            return valDateString;
+        }else {
+            return "None";
+        }
     }
 
 

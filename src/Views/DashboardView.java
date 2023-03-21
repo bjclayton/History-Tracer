@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -60,10 +64,10 @@ public class DashboardView extends JFrame {
         JFreeChart chartMostVisited = createChart(createDataset(choice));
         ChartPanel panelMostVisited = new ChartPanel(chartMostVisited);
 
-        JFreeChart barMostVisited = createBar(CategoryDataset(choice), "No_Date");
+        JFreeChart barMostVisited = createBar(CategoryDataset(choice, "No_Date"), "No_Date");
         ChartPanel panelbar = new ChartPanel(barMostVisited);
 
-        JFreeChart dateMostVisited = createBar(CategoryDataset(choice), "Date");
+        JFreeChart dateMostVisited = createBar(CategoryDataset(choice, "Date"), "Date");
         ChartPanel paneldate = new ChartPanel(dateMostVisited);
         
         
@@ -88,12 +92,19 @@ public class DashboardView extends JFrame {
         return dataset;         
     }
 
-    private static DefaultCategoryDataset CategoryDataset(String choice) throws IOException, SQLException {        
+    private static DefaultCategoryDataset CategoryDataset(String choice, String style) throws IOException, SQLException {  
+        if(style.equals("Date")){
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+            for (Entry<String, Integer> e : getTopFiveDate(Constant.getDates()).entrySet()) {
+                dataset.setValue(e.getValue(), "Visits", e.getKey());
+            }
+            return dataset; 
+        }       
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (SiteHistory site : mostVisited) {
-            dataset.setValue(site.getVisitCount(), "Visits", site.getTitle());
-        }
-        return dataset;         
+            for (SiteHistory site : mostVisited) {
+                dataset.setValue(site.getVisitCount(), "Visits", site.getTitle());
+            }
+            return dataset;        
     }
      
     private static JFreeChart createChart(PieDataset dataset) {
@@ -207,5 +218,28 @@ public class DashboardView extends JFrame {
                 values[i] = dataFromDb.get(i).getVisitCount();
             }
         }
+    }
+
+
+
+    private static Map<String, Integer> getTopFiveDate(HashMap<String, Integer> data){
+        ArrayList<Map.Entry<String, Integer>> entryList = new ArrayList<>(data.entrySet());
+        Collections.sort(entryList, Collections.reverseOrder(Map.Entry.comparingByValue()));
+        Map<String, Integer> highestPairs = new LinkedHashMap<>();
+
+        // get the highest five pairs
+        if(data.size() >= 5){
+            for (int i = 0; i < 5 && i < entryList.size(); i++) {
+                Map.Entry<String, Integer> entry = entryList.get(i);
+                highestPairs.put(entry.getKey(), entry.getValue());
+            }
+        }else{
+            for (int i = 0; i < entryList.size(); i++) {
+                Map.Entry<String, Integer> entry = entryList.get(i);
+                highestPairs.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return highestPairs;
     }
 }

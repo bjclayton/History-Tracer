@@ -1,6 +1,7 @@
 package Helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Models.Brave;
 import Models.Chrome;
@@ -29,6 +30,7 @@ public class Constant {
     private static Dashboard dashboard;
     private static ArrayList<SiteHistory> listSites = new ArrayList<>();
     private static String browserSelected;
+    private static HashMap<String, Integer> dates = new HashMap<>();
 
     public static Chrome getChrome() {
         return chrome;
@@ -134,5 +136,13 @@ public class Constant {
         if(!browserSelected.equals("Dashboard")){
             Constant.browserSelected = browserSelected;
         }
+    }
+
+    public static HashMap<String, Integer> getDates() {
+        return dates;
+    }
+
+    public static void setDates(String key, int value) {
+        Constant.dates.put(key, value);
     }
 }
