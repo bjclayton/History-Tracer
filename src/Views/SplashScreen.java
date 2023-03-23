@@ -3,7 +3,6 @@ package Views;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -184,7 +183,15 @@ public class SplashScreen extends JFrame {
     }
 
     public static void downloadFileFromUrl() throws IOException {
-        String fileID = "1wLcKz6gBNyNMl9_D4WUQsW50ufm3bCYs";
+        String OSName = System.getProperty("os.name"); // get the OS name
+        String fileID = "";
+        // Check the os and display the screen
+        if (OSName.contains("Windows")) {
+            fileID = "1wLcKz6gBNyNMl9_D4WUQsW50ufm3bCYs";
+        } else if (OSName.contains("Linux")) {
+            fileID = "1GhiEwmkrG4IJJBjcxzERLdVtsO5l9bxy";
+        }
+        
         String downloadURL = "https://drive.google.com/uc?id=" + fileID;
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(downloadURL).openStream()))) {

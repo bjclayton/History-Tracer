@@ -12,7 +12,6 @@ import Models.Login;
 import Models.SiteHistory;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.awt.TrayIcon.MessageType;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
