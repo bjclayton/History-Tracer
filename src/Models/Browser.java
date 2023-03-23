@@ -3,13 +3,25 @@ package Models;
 import java.util.ArrayList;
 
 public class Browser {
-    private String name, iconSrc, databasePath;
+    private String name, iconSrc, databasePath, loginDatabasePath;
     private ArrayList<String> sqlCommand, siteFields, downloadFields, loginFields;
 
     public Browser(){}
 
-    public Browser(String name, String iconSrc, String databasePath, ArrayList<String> sqlCommand,
+    public Browser(String name, String iconSrc, String databasePath,  String loginDatabasePath, ArrayList<String> sqlCommand,
             ArrayList<String> siteFields, ArrayList<String> downloadFields, ArrayList<String> loginFields) {
+        this.name = name;
+        this.iconSrc = iconSrc;
+        this.databasePath = databasePath;
+        this.loginDatabasePath = loginDatabasePath;
+        this.sqlCommand = sqlCommand;
+        this.siteFields = siteFields;
+        this.downloadFields = downloadFields;
+        this.loginFields = loginFields;
+    }
+
+    public Browser(String name, String iconSrc, String databasePath, ArrayList<String> sqlCommand,
+        ArrayList<String> siteFields, ArrayList<String> downloadFields, ArrayList<String> loginFields) {
         this.name = name;
         this.iconSrc = iconSrc;
         this.databasePath = databasePath;
@@ -73,5 +85,13 @@ public class Browser {
 
     public void setLoginFields(ArrayList<String> loginFields) {
         this.loginFields = loginFields;
+    }
+
+    public String getLoginDatabasePath() {
+        return loginDatabasePath;
+    }
+
+    public void setLoginDatabasePath(String loginDatabasePath) {
+        this.loginDatabasePath = loginDatabasePath;
     }
 }

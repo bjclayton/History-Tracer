@@ -42,4 +42,11 @@ public class WindowsHistory extends HistoryView {
     public void braveHistory(String choice) throws IOException, SQLException {
         showDetails(DashboardDatabase.braveHistory(choice));
     }
+
+
+    @Override
+    public void browserDownload(String name) throws IOException, SQLException {
+        showDownloads(DashboardDatabase.browserDownload(name));
+    }
+
 }

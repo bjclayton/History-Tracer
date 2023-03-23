@@ -4,6 +4,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import Models.Browser;
+import Models.Downloads;
 import Models.SiteHistory;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -11,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,8 +21,8 @@ import java.sql.SQLException;
 
 public class DashboardDatabase {
     // ------------------------------------ All variables
-    // -----------------------------------
     private static ArrayList<SiteHistory> listInfo = new ArrayList<>();
+    private static ArrayList<Downloads> downloadsData = new ArrayList<>();
     private static Connection Conn;
     private static Statement stmt;
     private static ResultSet rs;
@@ -43,7 +46,6 @@ public class DashboardDatabase {
     }
 
     // ------------------------------------------- Search chrome history
-    // ---------------------------------------
     public static ArrayList<SiteHistory> ChromeHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -77,6 +79,7 @@ public class DashboardDatabase {
                     Constant.setDates(convertTime(visitTime), 0);
                 }
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -86,7 +89,6 @@ public class DashboardDatabase {
     }
 
     // ------------------------------------------- Search Microsoft Edge history
-    // ---------------------------------------
     public static ArrayList<SiteHistory> microsoftEdgeHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -129,11 +131,11 @@ public class DashboardDatabase {
     }
 
     // ------------------------------------------- Search Firefox history
-    // ---------------------------------------
     public static ArrayList<SiteHistory> firefoxHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
         int numberVisitsByDate = 0;
+
 
         if (!Objects.equals(choice, "Display")) {
             query = String.format(Constant.getFirefox().getSqlCommand().get(1), choice);
@@ -141,8 +143,9 @@ public class DashboardDatabase {
             query = Constant.getFirefox().getSqlCommand().get(0);
         }
 
-        urlDatabase = Constant.getFirefox().getDatabasePath();
-        copyDatabase(String.format(urlDatabase, username));
+        urlDatabase = String.format(Constant.getFirefox().getDatabasePath(), username, getProfile());
+
+        copyDatabase(urlDatabase);
         try {
             setConn();
             rs = stmt.executeQuery(query);
@@ -171,8 +174,28 @@ public class DashboardDatabase {
         return listInfo;
     }
 
+
+    private static String getProfile(){
+        String profilePath = System.getProperty("user.home") + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\";
+        File profileDir = new File(profilePath);
+        File[] profiles = profileDir.listFiles();
+
+        for (File profile : profiles) {
+            if (profile.isDirectory() &&  profile.getName().contains(".default")) {
+                String profileName = profile.getName();
+                Path databasePath = Paths.get(profile.getAbsolutePath(), "places.sqlite");
+
+                // Check if the database file exists
+                if (Files.exists(databasePath)) {
+                    return profileName;
+                }
+            }
+        }
+        return "";
+    }
+
+
     // ------------------------------------------- Search Opera history
-    // ---------------------------------------
     public static ArrayList<SiteHistory> operaHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -215,7 +238,6 @@ public class DashboardDatabase {
     }
 
     // ------------------------------------------- Search Vivaldi history
-    // ---------------------------------------
     public static ArrayList<SiteHistory> vivaldiHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -258,7 +280,6 @@ public class DashboardDatabase {
     }
 
     // ------------------------------------------- Search Brave history
-    // ---------------------------------------
     public static ArrayList<SiteHistory> braveHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -335,5 +356,60 @@ public class DashboardDatabase {
             System.out.println("Other OS");
         }
     }
+
+
+     // ------------------------------------------- Search chrome history
+     public static ArrayList<Downloads> browserDownload(String name) throws IOException, SQLException {
+        downloadsData.clear();
+        Browser browser = null;
+
+        switch (name) {
+            case "Chrome":
+                browser = Constant.getChrome();        
+                break;
+            case "Microsoft Edge":
+                browser = Constant.getMicrosoftEdge();        
+                break;
+            case "Opera":
+                browser = Constant.getOpera();        
+                break;
+            case "Vivaldi":
+                browser = Constant.getVivaldi();        
+                break;
+            case "Brave":
+                browser = Constant.getBrave();        
+                break;
+            default:
+                break;
+        } 
+        
+        if(!name.equals("Firefox")){
+
+            Constant.setBrowser(browser);
+
+            try {
+                setConn();
+    
+                query = Constant.getBrowser().getSqlCommand().get(2);
+                rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    String referrer = rs.getString(Constant.getBrowser().getDownloadFields().get(0));
+                    String current_path = rs.getString(Constant.getBrowser().getDownloadFields().get(1));
+                    String total_bytes = rs.getString(Constant.getBrowser().getDownloadFields().get(2));
+    
+                    Downloads info = new Downloads(referrer, current_path, total_bytes);
+                    downloadsData.add(info);
+                }
+    
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+    
+            close();    
+        }
+        
+        return downloadsData;
+    }
+
 
 }

@@ -1,6 +1,8 @@
 package Views;
 
 import Models.TreeNode;
+import Models.Downloads;
+import Models.Login;
 import Models.SiteHistory;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -43,12 +45,15 @@ public abstract class HistoryView extends JFrame {
     private static String  browserSelected = "";
     private static int row, column;
     private static ArrayList<SiteHistory> sites;
-
+    private static ArrayList<Login> logins;
+    private static ArrayList<Downloads> downloads;
 
     private final JButton copy = new JButton("Copy", new ImageIcon(Constant.getIcons().getIconCopy()));
     private final JButton refresh = new JButton("Refresh", new ImageIcon(Constant.getIcons().getIconRefresh()));
     private final JButton sellectAll = new JButton("Select All", new ImageIcon(Constant.getIcons().getIconSelectAll()));
     private final JButton sort = new JButton("Sort By", new ImageIcon(Constant.getIcons().getIconSort()));
+    private final JButton more = new JButton("More", new ImageIcon(Constant.getIcons().getIconMore()));
+
 
     final String[] colHeads = {Constant.getTable().getTableSite().get(0), 
                                 Constant.getTable().getTableSite().get(1),
@@ -56,37 +61,37 @@ public abstract class HistoryView extends JFrame {
                                 Constant.getTable().getTableSite().get(3), 
                                 Constant.getTable().getTableSite().get(4)};
 
+    final String[] colHeadsDownload = {"Url", "Current Path", "Total Bytes"};
+
     String[][] data = {{"", "", "", "", ""}};
+    String[][] loginData = {{"", ""}};
+    String[][] downloadData = {{"", "", ""}};
     private String OSName = System.getProperty("os.name"); // get the OS name
 
     private static final JPopupMenu sortList = new JPopupMenu("Popup Sort");
     private static final JRadioButton  Ascending = new JRadioButton ("Ascending");
     private static final JRadioButton  Descending = new JRadioButton ("Descending");
-
+    private static final JPopupMenu morePop = new JPopupMenu("More");
 
     // ------- Method to Search Chrome's history ------------
     public abstract void ChromeHistory(String choice) throws IOException, SQLException;
 
-
     // ------- Method to Search microsoftEdge's history ------------
     public abstract void microsoftEdgeHistory(String choice) throws IOException, SQLException;
-
 
     // ------- Method to Search Firefox's history ------------
     public abstract void firefoxHistory(String choice) throws IOException, SQLException;
 
-
     // ------- Method to Search Opera's history ------------
     public abstract void operaHistory(String choice) throws IOException, SQLException;
-
 
     // ------- Method to Search Vivaldi's history ------------
     public abstract void vivaldiHistory(String choice) throws IOException, SQLException;
 
-
     // ------- Method to Search Brave's history ------------
     public abstract void braveHistory(String choice) throws IOException, SQLException;
 
+    public abstract void browserDownload(String name) throws IOException, SQLException;
 
     // ------------------------------------------ The constructor -------------------------------------
     public HistoryView() {
@@ -103,6 +108,7 @@ public abstract class HistoryView extends JFrame {
         Display(); // Display the Tree and JTable
         buttonToolbarAction(); // When user click a button on the toolbar
         popUpSort(); // Display a popup to sort
+        popUpMore(); // Display a popup to more
         setVisible(true);
     }
 
@@ -129,8 +135,14 @@ public abstract class HistoryView extends JFrame {
         sort.setVerticalTextPosition(JButton.BOTTOM);
         sort.setHorizontalTextPosition(JButton.CENTER);
 
+        more.setVerticalTextPosition(JButton.BOTTOM);
+        more.setHorizontalTextPosition(JButton.CENTER);
+
         barre.addSeparator();
         barre.add(sort);
+
+        barre.addSeparator();
+        barre.add(more);
 
         barre.addSeparator();
         searchView.setMaximumSize(new Dimension(200, 20)); // size for the searchView
@@ -237,12 +249,6 @@ public abstract class HistoryView extends JFrame {
         DefaultMutableTreeNode vivaldi = new DefaultMutableTreeNode(new TreeNode(Constant.getVivaldi().getName(), Constant.getVivaldi().getName(), Constant.getVivaldi().getIconSrc()));
         DefaultMutableTreeNode brave = new DefaultMutableTreeNode(new TreeNode(Constant.getBrave().getName(), Constant.getBrave().getName(), Constant.getBrave().getIconSrc()));
 
-        // // Add Download and Login node
-        // DefaultMutableTreeNode download = new DefaultMutableTreeNode(new TreeNode("Downloads", "Downloads", "resources/images/iconsNode.png"));
-        // DefaultMutableTreeNode login = new DefaultMutableTreeNode(new TreeNode("Logins", "Logins", "resources/images/iconsNode.png"));
-
-        // chrome.add(download);
-        // chrome.add(login);
 
         // Add node to the root
         root.add(dashboard);
@@ -405,6 +411,64 @@ public abstract class HistoryView extends JFrame {
     }
 
 
+    public void showDownloads(ArrayList<Downloads> listInfo) throws SQLException {
+        downloads = listInfo; // Take a copy of listInfo
+
+        String[][] downloadData = {{"", "", ""}};
+        remove(scrollTable);
+
+        table = new JTable(downloadData, colHeadsDownload) {
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+        };
+
+        table.setShowGrid(false);
+        table.setShowHorizontalLines(false);
+        table.setShowVerticalLines(false);
+
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(true);
+
+        scrollTable = new JScrollPane(table);
+        add(scrollTable, BorderLayout.CENTER);
+        setVisible(true);
+
+        int counter = 0;
+        downloadData = new String[listInfo.size()][5];
+
+        for (Downloads details : listInfo) {
+            downloadData[counter][0] = details.getReferrer();
+            downloadData[counter][1] = details.getCurrent_path();
+            downloadData[counter][2] = details.getTotal_bytes();
+            counter++;
+        }
+
+        String[][] dataTemp = new String[counter][3];
+        System.arraycopy(downloadData, 0, dataTemp, 0, counter);
+        downloadData = dataTemp;
+
+        remove(scrollTable);
+
+        table = new JTable(downloadData, colHeadsDownload) {
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+        };
+
+
+        table.setShowGrid(false);
+        table.setShowHorizontalLines(false);
+        table.setShowVerticalLines(false);
+        table.setCellSelectionEnabled(true);
+
+        scrollTable = new JScrollPane(table);
+        add(scrollTable, BorderLayout.CENTER);
+        setVisible(true);
+    }
+
+
+
     // Copy the database (To avoid an error like "database is locked")
     public void copyDatabase(String path) throws IOException, SQLException {
         File source = new File(path);
@@ -517,6 +581,36 @@ public abstract class HistoryView extends JFrame {
     }
 
 
+    //-------------------------- Popup for the Button More --------------------------------
+    public void popUpMore() {
+        JMenuItem download = new JMenuItem("Downloads");
+        JMenuItem login = new JMenuItem("Logins");
+
+        download.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (browserSelected.length() != 0) {
+                        browserDownload(browserSelected);
+                    }
+                } catch (IOException | SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+
+        login.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               
+            }
+        });
+
+
+        // add item to the popup
+        morePop.add(download);
+        morePop.add(login);
+    }
+
     // When user click button on the toolbar
     void buttonToolbarAction(){
 
@@ -524,6 +618,14 @@ public abstract class HistoryView extends JFrame {
         sort.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 sortList.show(sort, sort.getWidth()/2-26, sort.getHeight()/2+30); // show popup
+            }
+        });
+
+
+        // Button Sort action
+        more.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            morePop.show(more, more.getWidth()/2-21, more.getHeight()/2+30); // show popup
             }
         });
 

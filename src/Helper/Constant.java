@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Models.Brave;
+import Models.Browser;
 import Models.Chrome;
 import Models.Dashboard;
+import Models.Downloads;
 import Models.Firefox;
 import Models.Icons;
 import Models.Linux;
@@ -23,14 +25,28 @@ public class Constant {
     private static Opera opera;
     private static Vivaldi vivaldi;
     private static Brave brave;
+    private static Browser browser;
     private static Windows windows;
     private static Linux linux;
     private static Icons icons;
     private static Table table;
     private static Dashboard dashboard;
     private static ArrayList<SiteHistory> listSites = new ArrayList<>();
+    private static ArrayList<Downloads> downloadsData;
     private static String browserSelected;
     private static HashMap<String, Integer> dates = new HashMap<>();
+
+    public static ArrayList<Downloads> getDownloadsData() {
+        return downloadsData;
+    }
+
+    public static void setDownloadsData(ArrayList<Downloads> downloadsData) {
+        Constant.downloadsData = downloadsData;
+    }
+
+    public static void setDates(HashMap<String, Integer> dates) {
+        Constant.dates = dates;
+    }
 
     public static Chrome getChrome() {
         return chrome;
@@ -144,5 +160,13 @@ public class Constant {
 
     public static void setDates(String key, int value) {
         Constant.dates.put(key, value);
+    }
+
+    public static Browser getBrowser() {
+        return browser;
+    }
+
+    public static void setBrowser(Browser browser) {
+        Constant.browser = browser;
     }
 }

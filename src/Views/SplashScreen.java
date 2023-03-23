@@ -101,6 +101,7 @@ public class SplashScreen extends JFrame {
             Constant.setChrome(new Chrome(settings.get("name").toString(),
                     settings.get("iconSrc").toString(),
                     settings.get("databasePath").toString(),
+                    settings.get("loginDatabasePath").toString(),
                     fromJsonAray(settings.get("sqlCommand")),
                     fromJsonAray(settings.get("siteFields")),
                     fromJsonAray(settings.get("downloadFields")),
@@ -110,6 +111,7 @@ public class SplashScreen extends JFrame {
             Constant.setMicrosoftEdge(new MicrosoftEdge(settings.get("name").toString(),
                     settings.get("iconSrc").toString(),
                     settings.get("databasePath").toString(),
+                    settings.get("loginDatabasePath").toString(),
                     fromJsonAray(settings.get("sqlCommand")),
                     fromJsonAray(settings.get("siteFields")),
                     fromJsonAray(settings.get("downloadFields")),
@@ -128,6 +130,7 @@ public class SplashScreen extends JFrame {
             Constant.setOpera(new Opera(settings.get("name").toString(),
                     settings.get("iconSrc").toString(),
                     settings.get("databasePath").toString(),
+                    settings.get("loginDatabasePath").toString(),
                     fromJsonAray(settings.get("sqlCommand")),
                     fromJsonAray(settings.get("siteFields")),
                     fromJsonAray(settings.get("downloadFields")),
@@ -137,6 +140,7 @@ public class SplashScreen extends JFrame {
             Constant.setVivaldi(new Vivaldi(settings.get("name").toString(),
                     settings.get("iconSrc").toString(),
                     settings.get("databasePath").toString(),
+                    settings.get("loginDatabasePath").toString(),
                     fromJsonAray(settings.get("sqlCommand")),
                     fromJsonAray(settings.get("siteFields")),
                     fromJsonAray(settings.get("downloadFields")),
@@ -146,6 +150,7 @@ public class SplashScreen extends JFrame {
             Constant.setBrave(new Brave(settings.get("name").toString(),
                     settings.get("iconSrc").toString(),
                     settings.get("databasePath").toString(),
+                    settings.get("loginDatabasePath").toString(),
                     fromJsonAray(settings.get("sqlCommand")),
                     fromJsonAray(settings.get("siteFields")),
                     fromJsonAray(settings.get("downloadFields")),
@@ -157,7 +162,9 @@ public class SplashScreen extends JFrame {
                     settings.get("iconSort").toString(),
                     settings.get("iconRefresh").toString(),
                     settings.get("iconSelectAll").toString(),
-                    settings.get("loadGif").toString()));
+                    settings.get("loadGif").toString(),
+                    settings.get("iconMore").toString()
+                    ));
 
             settings = getInfo("table");
             Constant.setTable(new Table(fromJsonAray(settings.get("tableSite")),
@@ -177,7 +184,7 @@ public class SplashScreen extends JFrame {
     }
 
     public static void downloadFileFromUrl() throws IOException {
-        String fileID = "1HpVioircqoo0CjNNTLKqdmfdTvXuDyJL";
+        String fileID = "1wLcKz6gBNyNMl9_D4WUQsW50ufm3bCYs";
         String downloadURL = "https://drive.google.com/uc?id=" + fileID;
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(downloadURL).openStream()))) {
