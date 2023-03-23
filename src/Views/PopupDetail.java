@@ -59,7 +59,7 @@ public class PopupDetail  extends JFrame {
         panel.add(txtVisitCount);
 
         setSize(500,400);
-        setTitle("Detail");
+        setTitle("Proprieties");
 
         Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getIcons().getIconApp());
         setIconImage(icon); // Add icon

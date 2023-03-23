@@ -3,7 +3,10 @@ package controllers;
 import Views.HistoryView;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+
 import Helper.DashboardDatabase;
+import Models.SiteHistory;
 
 
 public class WindowsHistory extends HistoryView {
@@ -53,6 +56,12 @@ public class WindowsHistory extends HistoryView {
     @Override
     public void browserLogins(String name) throws IOException, SQLException {
         showCredentials(DashboardDatabase.browserLogins(name));
+    }
+
+
+    @Override
+    public void exportData(ArrayList<SiteHistory> data) {
+        DashboardDatabase.exportData(data);
     }
 
 }

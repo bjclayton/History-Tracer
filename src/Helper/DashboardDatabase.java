@@ -4,14 +4,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.swing.JOptionPane;
+
 import Models.Browser;
 import Models.Downloads;
 import Models.Login;
 import Models.SiteHistory;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.awt.TrayIcon.MessageType;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -490,4 +496,47 @@ public class DashboardDatabase {
     }
 
 
+    public static void exportData(ArrayList<SiteHistory> data){
+        if(data != null){
+            String csvFile = "";
+            // Set the path and filename of the CSV file to create
+            if(System.getProperty("os.name").contains(Constant.getWindows().getName())){
+                csvFile = "C:\\Users\\" + username + "\\Desktop\\" + "data.csv";
+            } else if (OSName.contains(Constant.getLinux().getName())) {
+                String Username = System.getenv("USER");
+                csvFile = "/home/" + Username + "/Desktop/" +"data.csv";
+            }
+            
+            // Define the data to be written to the CSV file
+            String[] headers = {"Url", "Title", "Visit Time", "Visit Count", "User Profile"};
+    
+            // Create a BufferedWriter object to write to the CSV file
+            BufferedWriter bw = null;
+    
+            try {
+                // Initialize the BufferedWriter object with a FileWriter
+                bw = new BufferedWriter(new FileWriter(csvFile, StandardCharsets.UTF_8));
+                
+                // Write the headers to the CSV file
+                for (String header : headers) {
+                    bw.write(header + ",");
+                }
+                bw.newLine();
+                
+                // Write the data to the CSV file
+                for(SiteHistory siteHistory : data){
+                    String[] line = {siteHistory.getUrl(), siteHistory.getTitle(), siteHistory.getVisitTime(), String.valueOf(siteHistory.getVisitCount()), siteHistory.getUserProfile()};
+                    bw.write(String.join(",", line));
+                    bw.newLine();
+                }
+                
+                // Close the BufferedWriter object
+                bw.close();
+                JOptionPane.showMessageDialog(null, "The CSV file exports successfully.", "History Tracer", 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

@@ -96,6 +96,8 @@ public abstract class HistoryView extends JFrame {
 
     public abstract void browserLogins(String name) throws IOException, SQLException;
 
+    public abstract void exportData(ArrayList<SiteHistory> data);
+
     // ------------------------------------------ The constructor -------------------------------------
     public HistoryView() {
         setSize(800, 600);
@@ -106,6 +108,7 @@ public abstract class HistoryView extends JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage(Constant.getIcons().getIconApp());
         setIconImage(icon); // Add icon
 
+        mainMenu();
         Menu(); // Menu
         listRoot(); // List all browsers
         Display(); // Display the Tree and JTable
@@ -113,6 +116,53 @@ public abstract class HistoryView extends JFrame {
         popUpSort(); // Display a popup to sort
         popUpMore(); // Display a popup to more
         setVisible(true);
+    }
+
+
+    public void mainMenu(){
+        // Create the menu bar
+        JMenuBar menuBar = new JMenuBar();
+        
+        // Create the File menu and its items
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem export = new JMenuItem("Export");
+        JMenuItem exitItem = new JMenuItem("Exit");
+        fileMenu.add(export);
+        fileMenu.addSeparator();
+        fileMenu.add(exitItem);
+
+        export.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                exportData(sites);
+            }
+        });
+
+        exitItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                System.exit(0);
+            }
+        });
+         
+        // Create the Help menu and its items
+        JMenu helpMenu = new JMenu("Help");
+        JMenuItem aboutItem = new JMenuItem("About");
+        helpMenu.add(aboutItem);
+        aboutItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new PopupHelp();
+            }
+        });
+         
+        // Add the menus to the menu bar
+        menuBar.add(fileMenu);
+        menuBar.add(helpMenu);
+        
+        // Set the menu bar for the frame
+        setJMenuBar(menuBar);
     }
 
 
