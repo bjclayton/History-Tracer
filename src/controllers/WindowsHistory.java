@@ -49,4 +49,10 @@ public class WindowsHistory extends HistoryView {
         showDownloads(DashboardDatabase.browserDownload(name));
     }
 
+
+    @Override
+    public void browserLogins(String name) throws IOException, SQLException {
+        showCredentials(DashboardDatabase.browserLogins(name));
+    }
+
 }

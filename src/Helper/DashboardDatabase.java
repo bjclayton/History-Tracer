@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import Models.Browser;
 import Models.Downloads;
+import Models.Login;
 import Models.SiteHistory;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -23,12 +24,13 @@ public class DashboardDatabase {
     // ------------------------------------ All variables
     private static ArrayList<SiteHistory> listInfo = new ArrayList<>();
     private static ArrayList<Downloads> downloadsData = new ArrayList<>();
+    private static ArrayList<Login> loginData = new ArrayList<>();
     private static Connection Conn;
     private static Statement stmt;
     private static ResultSet rs;
     private static String OSName = System.getProperty("os.name"); // get the OS name
     private static String username = System.getProperty("user.name");
-    private static String urlDatabase, query;
+    private static String urlDatabase, query, databaseName;
 
     // -------------------- Method to open connection
     public static void setConn() {
@@ -358,8 +360,8 @@ public class DashboardDatabase {
     }
 
 
-     // ------------------------------------------- Search chrome history
-     public static ArrayList<Downloads> browserDownload(String name) throws IOException, SQLException {
+    // ------------------------------------------- Search chrome history
+    public static ArrayList<Downloads> browserDownload(String name) throws IOException, SQLException {
         downloadsData.clear();
         Browser browser = null;
 
@@ -382,7 +384,7 @@ public class DashboardDatabase {
             default:
                 break;
         } 
-        
+    
         if(!name.equals("Firefox")){
 
             Constant.setBrowser(browser);
@@ -409,6 +411,82 @@ public class DashboardDatabase {
         }
         
         return downloadsData;
+    }
+
+
+    // ------------------------------------------- Search chrome history
+    public static ArrayList<Login> browserLogins(String name) throws IOException, SQLException {
+        loginData.clear();
+        Browser browser = null;
+
+        switch (name) {
+            case "Chrome":
+                browser = Constant.getChrome();        
+                break;
+            case "Microsoft Edge":
+                browser = Constant.getMicrosoftEdge();        
+                break;
+            case "Opera":
+                browser = Constant.getOpera();        
+                break;
+            case "Vivaldi":
+                browser = Constant.getVivaldi();        
+                break;
+            case "Brave":
+                browser = Constant.getBrave();        
+                break;
+            default:
+                break;
+        } 
+        
+        if(!name.equals("Firefox")){
+
+            Constant.setBrowser(browser);
+            copyLoginDatabase(String.format(Constant.getBrowser().getLoginDatabasePath(), username));
+
+            try {
+                Conn = DriverManager.getConnection("jdbc:sqlite:" + databaseName);
+                stmt = Conn.createStatement();
+
+                query = Constant.getBrowser().getSqlCommand().get(3);
+                rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    String url = rs.getString(Constant.getBrowser().getLoginFields().get(0));
+                    String username_value = rs.getString(Constant.getBrowser().getLoginFields().get(1));
+    
+                    Login info = new Login(url, username_value);
+                    loginData.add(info);
+                }
+    
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+    
+            Conn.close();    
+        }
+        
+        return loginData;
+    }
+
+    // Copy the database (To avoid an error like "database is locked")
+    public static void copyLoginDatabase(String path) throws IOException, SQLException {
+        File source = new File(path);
+        File destination = null;
+
+        if (OSName.contains(Constant.getWindows().getName())) {
+            destination = new File("windowsLoginDatabase.sqlite");
+            Files.deleteIfExists(Path.of("windowsLoginDatabase.sqlite"));
+            Files.copy(source.toPath(), destination.toPath());
+            databaseName = "windowsLoginDatabase.sqlite";
+        } else if (Objects.equals(OSName, Constant.getLinux().getName())) {
+            Files.deleteIfExists(Path.of("linuxLoginDatabase.sqlite"));
+            destination = new File("linuxLoginDatabase.sqlite");
+            Files.copy(source.toPath(), destination.toPath());
+            databaseName = "linuxLoginDatabase.sqlite";
+        } else {
+            databaseName = "";
+            System.out.println("Other OS");
+        }
     }
 
 

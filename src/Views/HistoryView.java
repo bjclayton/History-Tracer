@@ -62,6 +62,7 @@ public abstract class HistoryView extends JFrame {
                                 Constant.getTable().getTableSite().get(4)};
 
     final String[] colHeadsDownload = {"Url", "Current Path", "Total Bytes"};
+    final String[] colHeadsLogin = {"Url", "Username"};
 
     String[][] data = {{"", "", "", "", ""}};
     String[][] loginData = {{"", ""}};
@@ -92,6 +93,8 @@ public abstract class HistoryView extends JFrame {
     public abstract void braveHistory(String choice) throws IOException, SQLException;
 
     public abstract void browserDownload(String name) throws IOException, SQLException;
+
+    public abstract void browserLogins(String name) throws IOException, SQLException;
 
     // ------------------------------------------ The constructor -------------------------------------
     public HistoryView() {
@@ -435,7 +438,7 @@ public abstract class HistoryView extends JFrame {
         setVisible(true);
 
         int counter = 0;
-        downloadData = new String[listInfo.size()][5];
+        downloadData = new String[listInfo.size()][3];
 
         for (Downloads details : listInfo) {
             downloadData[counter][0] = details.getReferrer();
@@ -451,6 +454,62 @@ public abstract class HistoryView extends JFrame {
         remove(scrollTable);
 
         table = new JTable(downloadData, colHeadsDownload) {
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+        };
+
+
+        table.setShowGrid(false);
+        table.setShowHorizontalLines(false);
+        table.setShowVerticalLines(false);
+        table.setCellSelectionEnabled(true);
+
+        scrollTable = new JScrollPane(table);
+        add(scrollTable, BorderLayout.CENTER);
+        setVisible(true);
+    }
+
+
+    public void showCredentials(ArrayList<Login> listInfo) throws SQLException {
+        logins = listInfo; // Take a copy of listInfo
+
+        String[][] loginData = {{"", "", ""}};
+        remove(scrollTable);
+
+        table = new JTable(loginData, colHeadsLogin) {
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+        };
+
+        table.setShowGrid(false);
+        table.setShowHorizontalLines(false);
+        table.setShowVerticalLines(false);
+
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(true);
+
+        scrollTable = new JScrollPane(table);
+        add(scrollTable, BorderLayout.CENTER);
+        setVisible(true);
+
+        int counter = 0;
+        loginData = new String[listInfo.size()][2];
+
+        for (Login details : listInfo) {
+            loginData[counter][0] = details.getUrl();
+            loginData[counter][1] = details.getUsername();
+            counter++;
+        }
+
+        String[][] dataTemp = new String[counter][2];
+        System.arraycopy(loginData, 0, dataTemp, 0, counter);
+        loginData = dataTemp;
+
+        remove(scrollTable);
+
+        table = new JTable(loginData, colHeadsLogin) {
             public boolean editCellAt(int row, int column, java.util.EventObject e) {
                 return false;
             }
@@ -601,7 +660,13 @@ public abstract class HistoryView extends JFrame {
 
         login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               
+                try {
+                    if (browserSelected.length() != 0) {
+                        browserLogins(browserSelected);
+                    }
+                } catch (IOException | SQLException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
