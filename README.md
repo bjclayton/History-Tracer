@@ -18,8 +18,19 @@ Here's a walkthrough of implemented user stories:
 
 GIF created with `LiceCap`.
 
+
 ## Development server
 * 
+
+
+## Open-source ressources used
+* Swing
+* SQLite JDBC 
+* JSON.simple
+* Dom-2.3.0-jaxb
+* JFreeChart
+* JCommon
+
 
 ## License
 
