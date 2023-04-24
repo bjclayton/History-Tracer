@@ -6,17 +6,26 @@ import Helper.Constant;
 
 import java.awt.*;
 
-/* A class (popup) to display more detail about a line
-when a user click on the JTable
-*/
+/**
+ * The type Popup detail.
+ * A class to display more detail about a line
+ * when a user click on the JTable
+ */
+
 public class PopupDetail  extends JFrame {
 
+    /**
+     * The Panel.
+     */
     JPanel panel;
     private static JTextField  txtTitle;
     private static JTextField  txtUrl;
     private static JTextField  txtTime;
     private static JTextField  txtVisitCount;
 
+    /**
+     * Instantiates a new Popup detail.
+     */
     public PopupDetail(){
         // create label
         JLabel lblTitle = new JLabel("Title");
@@ -68,18 +77,38 @@ public class PopupDetail  extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Sets txt title.
+     *
+     * @param text the text
+     */
     public static void setTxtTitle(String text) {
         txtTitle.setText(text);
     }
 
+    /**
+     * Sets txt url.
+     *
+     * @param text the text
+     */
     public static void setTxtUrl(String text) {
         txtUrl.setText(text);
     }
 
+    /**
+     * Sets txt time.
+     *
+     * @param text the text
+     */
     public static void setTxtTime(String text) {
         txtTime.setText(text);
     }
 
+    /**
+     * Sets txt visit count.
+     *
+     * @param text the text
+     */
     public static void setTxtVisitCount(String text) {
         txtVisitCount.setText(text);
     }

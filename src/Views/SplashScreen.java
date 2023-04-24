@@ -20,9 +20,17 @@ import java.net.URLConnection;
 import Helper.Constant;
 import Models.*;
 
+/**
+ * The type Splash screen.
+ */
 public class SplashScreen extends JFrame {
     private static String File_NAME = "appSettings.json";
 
+    /**
+     * Instantiates a new Splash screen.
+     *
+     * @throws Throwable the throwable
+     */
     public SplashScreen() throws Throwable {
         setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -47,6 +55,15 @@ public class SplashScreen extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Read the json file "appSettings.json".
+     *
+     * @param key
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ParseException
+     */
     private static JSONObject getInfo(String key) throws FileNotFoundException, IOException, ParseException {
         // parsing file "appSettings.json"
         Object obj = new JSONParser().parse(new FileReader(File_NAME));
@@ -58,6 +75,12 @@ public class SplashScreen extends JFrame {
         return jsonObjKey;
     }
 
+    /**
+     * Get JsonObjects
+     *
+     * @param jsonObj
+     * @return
+     */
     private static ArrayList<String> fromJsonAray(Object jsonObj) {
         JSONArray jsonArray = (JSONArray) jsonObj;
         ArrayList<String> array = new ArrayList<>();
@@ -69,6 +92,9 @@ public class SplashScreen extends JFrame {
         return array;
     }
 
+    /**
+     * Check if the use is connected.
+     */
     private boolean isConnected() {
         try {
             URL url = new URL("https://www.google.com");
@@ -81,6 +107,9 @@ public class SplashScreen extends JFrame {
         return true;
     }
 
+    /**
+     * Load settings from appSetting.json.
+     */
     private static void loadSettings() {
         JSONObject settings;
         try {
@@ -182,6 +211,11 @@ public class SplashScreen extends JFrame {
         }
     }
 
+    /**
+     * Download file ("appSettings.json") from url.
+     *
+     * @throws IOException the io exception
+     */
     public static void downloadFileFromUrl() throws IOException {
         String OSName = System.getProperty("os.name"); // get the OS name
         String fileID = "";
@@ -209,8 +243,14 @@ public class SplashScreen extends JFrame {
         }
     }
 
+    /**
+     * The type Main pane.
+     */
     public class MainPane extends JPanel {
 
+        /**
+         * Instantiates a new Main pane.
+         */
         public MainPane() {
             setBorder(new EmptyBorder(100, 10, 10, 10));
             setLayout(new GridBagLayout());

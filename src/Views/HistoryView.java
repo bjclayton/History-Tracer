@@ -32,9 +32,12 @@ import java.util.Date;
 import java.util.Objects;
 
 
+/**
+ * The type History view.
+ * This abstract class implements the main application window that
+ * displays browsing history data, downloaded files, and bookmarks for different browsers.
+ */
 public abstract class HistoryView extends JFrame {
-
-    // ------------------------------------ All variables -----------------------------------
     private JToolBar barre = new JToolBar();
     private JTextField searchView = new JTextField();
     private JScrollPane scrollTree;
@@ -55,17 +58,35 @@ public abstract class HistoryView extends JFrame {
     private final JButton more = new JButton("More", new ImageIcon(Constant.getIcons().getIconMore()));
 
 
-    final String[] colHeads = {Constant.getTable().getTableSite().get(0), 
+    /**
+     * The Col heads.
+     */
+    final String[] colHeads = {Constant.getTable().getTableSite().get(0),
                                 Constant.getTable().getTableSite().get(1),
                                 Constant.getTable().getTableSite().get(2),
                                 Constant.getTable().getTableSite().get(3), 
                                 Constant.getTable().getTableSite().get(4)};
 
+    /**
+     * The Col heads download.
+     */
     final String[] colHeadsDownload = {"Url", "Current Path", "Total Bytes"};
+    /**
+     * The Col heads login.
+     */
     final String[] colHeadsLogin = {"Url", "Username"};
 
+    /**
+     * The Data.
+     */
     String[][] data = {{"", "", "", "", ""}};
+    /**
+     * The Login data.
+     */
     String[][] loginData = {{"", ""}};
+    /**
+     * The Download data.
+     */
     String[][] downloadData = {{"", "", ""}};
     private String OSName = System.getProperty("os.name"); // get the OS name
 
@@ -74,31 +95,94 @@ public abstract class HistoryView extends JFrame {
     private static final JRadioButton  Descending = new JRadioButton ("Descending");
     private static final JPopupMenu morePop = new JPopupMenu("More");
 
-    // ------- Method to Search Chrome's history ------------
+    /**
+     * Chrome's history.
+     * Get Chrome browser browsing history data.
+     *
+     * @param choice the choice
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void ChromeHistory(String choice) throws IOException, SQLException;
 
-    // ------- Method to Search microsoftEdge's history ------------
+    /**
+     * Microsoft edge's history.
+     * Get Microsoft edge browsing history data.
+     *
+     * @param choice the choice
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void microsoftEdgeHistory(String choice) throws IOException, SQLException;
 
-    // ------- Method to Search Firefox's history ------------
+    /**
+     * Firefox's history.
+     * Get Firefox browsing history data.
+     *
+     * @param choice the choice
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void firefoxHistory(String choice) throws IOException, SQLException;
 
-    // ------- Method to Search Opera's history ------------
+    /**
+     * Opera's history.
+     * Get Opera browsing history data.
+     *
+     * @param choice the choice
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void operaHistory(String choice) throws IOException, SQLException;
 
-    // ------- Method to Search Vivaldi's history ------------
+    /**
+     * Vivaldi's history.
+     * Get Vivaldi browsing history data.
+     *
+     * @param choice the choice
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void vivaldiHistory(String choice) throws IOException, SQLException;
 
-    // ------- Method to Search Brave's history ------------
+    /**
+     * Brave's history.
+     * Get Brave browsing history data.
+     *
+     * @param choice the choice
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void braveHistory(String choice) throws IOException, SQLException;
 
+    /**
+     * Browser download.
+     *
+     * @param name the name
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void browserDownload(String name) throws IOException, SQLException;
 
+    /**
+     * Browser logins.
+     *
+     * @param name the name
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public abstract void browserLogins(String name) throws IOException, SQLException;
 
+    /**
+     * Export data.
+     *
+     * @param data the data
+     */
     public abstract void exportData(ArrayList<SiteHistory> data);
 
-    // ------------------------------------------ The constructor -------------------------------------
+    /**
+     * Instantiates a new History view.
+     */
     public HistoryView() {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -119,6 +203,9 @@ public abstract class HistoryView extends JFrame {
     }
 
 
+    /**
+     * Main menu.
+     */
     public void mainMenu(){
         // Create the menu bar
         JMenuBar menuBar = new JMenuBar();
@@ -145,8 +232,10 @@ public abstract class HistoryView extends JFrame {
                 System.exit(0);
             }
         });
-         
-        // Create the Help menu and its items
+
+        /**
+         * Create the Help menu and its items
+         */
         JMenu helpMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
         helpMenu.add(aboutItem);
@@ -166,7 +255,9 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    // ------------------------------ Menu and toolbar --------------------------------------------
+    /**
+     * Menu and toolbar.
+     */
     public void Menu() {
         barre.setFloatable(false);
         // put text on bottom of theses buttons
@@ -206,7 +297,9 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    // ------------------------------------------- The GUI ---------------------------------------
+    /**
+     * Display the data in the table
+     */
     private void Display() {
         scrollTree = new JScrollPane(tree);
 
@@ -224,14 +317,18 @@ public abstract class HistoryView extends JFrame {
         add(scrollTable, BorderLayout.CENTER);
 
 
-        // Click on tree
+        /**
+         * Click on tree
+         */
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 // get the node selected
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
 
-                // get value of the node selected by the user
+                /**
+                 * Get value of the node selected by the user
+                 */
                 if (node.getUserObject() instanceof TreeNode){
                     TreeNode nodeSelected = (TreeNode) node.getUserObject();
 
@@ -245,7 +342,9 @@ public abstract class HistoryView extends JFrame {
             }
         });
 
-        // Clear placeholder searchView
+        /**
+         * Clear placeholder searchView
+         */
         searchView.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
                 searchView.setText("");
@@ -253,7 +352,9 @@ public abstract class HistoryView extends JFrame {
         });
 
 
-        // Search text in the database
+        /**
+         * Search text in the database
+         */
         searchView.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
@@ -285,15 +386,22 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    // ----------------------------------------- The Tree -------------------------------------------
+    /**
+     * Create a JTree
+     * The nodes are: Chrome, Firefox, Vivaldi, Brave ...
+     */
     private void listRoot() {
         tree = new JTree(this.root);
         getContentPane().add(new JScrollPane(tree)); // tree's JScrollPane
 
-        // root of the tree
+        /**
+         * Root of the tree
+         */
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
 
-        // Create all node
+        /**
+         * Create all node
+         */
         DefaultMutableTreeNode dashboard = new DefaultMutableTreeNode(new TreeNode(Constant.getDashboard().getName(), Constant.getDashboard().getName(), Constant.getDashboard().getIconSrc()));
         DefaultMutableTreeNode chrome = new DefaultMutableTreeNode(new TreeNode(Constant.getChrome().getName(), Constant.getChrome().getName(), Constant.getChrome().getIconSrc()));
         DefaultMutableTreeNode microsoftEdge = new DefaultMutableTreeNode(new TreeNode(Constant.getMicrosoftEdge().getName(), Constant.getMicrosoftEdge().getName(), Constant.getMicrosoftEdge().getIconSrc()));
@@ -303,7 +411,9 @@ public abstract class HistoryView extends JFrame {
         DefaultMutableTreeNode brave = new DefaultMutableTreeNode(new TreeNode(Constant.getBrave().getName(), Constant.getBrave().getName(), Constant.getBrave().getIconSrc()));
 
 
-        // Add node to the root
+        /**
+         * Add node to the root
+         */
         root.add(dashboard);
         root.add(chrome);
         root.add(microsoftEdge);
@@ -320,7 +430,13 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    // ------------------------------------------- Tree mouse event ---------------------------------------
+    /**
+     * Do mouse clicked.
+     *
+     * @param nodeSelected the node selected
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     void doMouseClicked(String nodeSelected) throws IOException, SQLException {
 
         // Check click
@@ -332,7 +448,15 @@ public abstract class HistoryView extends JFrame {
         decision(browserSelected, "Display");
     }
 
-    // Choice which the right browser
+    /**
+     * Decision .
+     * Choice which the right browser
+     *
+     * @param browserSelected the browser selected
+     * @param choice          the choice
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public void decision(String browserSelected, String choice) throws IOException, SQLException {
         if (browserSelected.length() != 0) {
             switch (browserSelected.trim()) {
@@ -361,7 +485,10 @@ public abstract class HistoryView extends JFrame {
         }
     }
 
-    // Get position mouse click on JTable
+    /**
+     * Mouse position.
+     * Get position mouse click on JTable
+     */
     void mousePosition(){
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -373,7 +500,13 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    // ------------------------------------------- Show data on JTable ---------------------------------------
+    /**
+     * Show details.
+     * Show data on JTable
+     *
+     * @param listInfo the list info
+     * @throws SQLException the sql exception
+     */
     protected void showDetails(ArrayList<SiteHistory> listInfo) throws SQLException {
         sites = listInfo; // Take a copy of listInfo
 
@@ -422,7 +555,9 @@ public abstract class HistoryView extends JFrame {
             }
         };
 
-        // add mouse click when use select a row to display more details
+        /**
+         * Add mouse click when use select a row to display more details
+         */
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 
@@ -451,7 +586,13 @@ public abstract class HistoryView extends JFrame {
         setVisible(true);
     }
 
-    // Method to convert timeStamp
+    /**
+     * Method to convert timeStamp
+     * Convert time string.
+     *
+     * @param date the date
+     * @return the string
+     */
     public String convertTime(String date){
         // Getting the current system time and passing it and passing the long value in the Date class
         if(date != null){
@@ -464,6 +605,12 @@ public abstract class HistoryView extends JFrame {
     }
 
 
+    /**
+     * Show downloads.
+     *
+     * @param listInfo the list info
+     * @throws SQLException the sql exception
+     */
     public void showDownloads(ArrayList<Downloads> listInfo) throws SQLException {
         downloads = listInfo; // Take a copy of listInfo
 
@@ -521,6 +668,12 @@ public abstract class HistoryView extends JFrame {
     }
 
 
+    /**
+     * Show credentials.
+     *
+     * @param listInfo the list info
+     * @throws SQLException the sql exception
+     */
     public void showCredentials(ArrayList<Login> listInfo) throws SQLException {
         logins = listInfo; // Take a copy of listInfo
 
@@ -577,8 +730,14 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-
-    // Copy the database (To avoid an error like "database is locked")
+    /**
+     * Copy database.
+     * Copy the database (To avoid an error like "database is locked")
+     *
+     * @param path the path
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public void copyDatabase(String path) throws IOException, SQLException {
         File source = new File(path);
         File destination = null;
@@ -598,7 +757,9 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    //-------------------------- Popup for the Button Sort --------------------------------
+    /**
+     * Pop up sort by (title, date, and Visit count).
+     */
     static void popUpSort() {
         JMenuItem Title = new JMenuItem("Title");
         JMenuItem Date = new JMenuItem("Date");
@@ -609,7 +770,9 @@ public abstract class HistoryView extends JFrame {
         group.add(Ascending);
         group.add(Descending);
 
-        // Sort by title
+        /**
+         * Sort by title
+         */
         Title.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -621,7 +784,9 @@ public abstract class HistoryView extends JFrame {
         });
 
 
-        // Sort by date
+        /**
+         *  Sort by date
+         */
         Date.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -633,7 +798,9 @@ public abstract class HistoryView extends JFrame {
         });
 
 
-        // Sort by Visit count
+        /**
+         * Sort by Visit count
+         */
         vCount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -645,7 +812,9 @@ public abstract class HistoryView extends JFrame {
         });
 
 
-        // add item to the popup
+        /**
+         * add item to the popup
+         */
         sortList.add(Title);
         sortList.add(Date);
         sortList.add(vCount);
@@ -654,11 +823,17 @@ public abstract class HistoryView extends JFrame {
         sortList.add(Descending);
     }
 
-    // Method to sort the data
+    /**
+     * Check if the user want to sort by title, date or Visit count
+     *
+     * @param choice1 the choice 1
+     * @param choice2 the choice 2
+     * @throws IOException the io exception
+     */
     static void sortBy(String choice1, boolean choice2) throws IOException{
         int SortColNo = 0;
 
-        // check if the user want to sort by title, date or Visit count
+
         switch(choice1) {
             case "Title":
                 SortColNo = 1;
@@ -675,7 +850,9 @@ public abstract class HistoryView extends JFrame {
         table.setRowSorter(ColSort);
         ArrayList<RowSorter.SortKey> ColSortingKeys = new ArrayList<>();
 
-        // check if user select ASCENDING or ASCENDING
+        /**
+         * check if user select ASCENDING or ASCENDING
+         */
         if ("true".equals(String.valueOf(choice2))) {
             ColSortingKeys.add(new RowSorter.SortKey(SortColNo, SortOrder.DESCENDING));
         } else {
@@ -690,7 +867,9 @@ public abstract class HistoryView extends JFrame {
     }
 
 
-    //-------------------------- Popup for the Button More --------------------------------
+    /**
+     * Pop up more.
+     */
     public void popUpMore() {
         JMenuItem download = new JMenuItem("Downloads");
         JMenuItem login = new JMenuItem("Logins");
@@ -726,10 +905,15 @@ public abstract class HistoryView extends JFrame {
         morePop.add(login);
     }
 
-    // When user click button on the toolbar
+    /**
+     * Button toolbar action (Sort, SelectAll, Copy, ...).
+     * When user click button on the toolbar
+     */
     void buttonToolbarAction(){
 
-        // Button Sort action
+        /**
+         * Button Sort action
+         */
         sort.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 sortList.show(sort, sort.getWidth()/2-26, sort.getHeight()/2+30); // show popup
@@ -737,7 +921,9 @@ public abstract class HistoryView extends JFrame {
         });
 
 
-        // Button Sort action
+        /**
+         * Button More action
+         */
         more.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             morePop.show(more, more.getWidth()/2-21, more.getHeight()/2+30); // show popup
@@ -745,7 +931,9 @@ public abstract class HistoryView extends JFrame {
         });
 
 
-        // Button SelectAll action
+        /**
+         * Button SelectAll action
+         */
         sellectAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 table.selectAll();
@@ -753,7 +941,9 @@ public abstract class HistoryView extends JFrame {
         });
 
 
-        // Button copy (copy text)
+        /**
+         * Button copy (copy text)
+         */
         copy.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

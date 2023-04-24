@@ -26,12 +26,24 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
+/**
+ * The type Dashboard view extends JFrame.
+ * This class allows the user to obtain detailed reports on their digital presence by
+ * providing statistics on the most visited websites, the sites where they spend the most
+ * time, as well as a comparison with previous reports.
+ */
 public class DashboardView extends JFrame {
 
     private static ArrayList<SiteHistory> mostVisited = new ArrayList<>();
     private static double[] values;
     private static String choice = "";
 
+    /**
+     * Instantiates a new Dashboard view.
+     *
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public DashboardView() throws IOException, SQLException {
         setTitle("Dashboard");
 
@@ -50,6 +62,13 @@ public class DashboardView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * initialize the components for the dashboard.
+     *
+     * @param choice  the choice.
+     * @throws   IOException
+     * @throws  SQLException
+     */
     private void init(String choice) throws IOException, SQLException {
         this.getContentPane().setLayout(new GridBagLayout());
         getMostvisitedSites();
@@ -84,6 +103,7 @@ public class DashboardView extends JFrame {
         this.pack();
     }
 
+
     private static PieDataset createDataset(String choice) throws IOException, SQLException {
         DefaultPieDataset dataset = new DefaultPieDataset();
         for (SiteHistory site : mostVisited) {
@@ -92,6 +112,15 @@ public class DashboardView extends JFrame {
         return dataset;
     }
 
+    /**
+     * Get data (type: categorical)
+     *
+     * @param choice
+     * @param style
+     * @return
+     * @throws IOException
+     * @throws SQLException
+     */
     private static DefaultCategoryDataset CategoryDataset(String choice, String style)
             throws IOException, SQLException {
         if (style.equals("Date")) {
@@ -108,11 +137,24 @@ public class DashboardView extends JFrame {
         return dataset;
     }
 
+    /**
+     * Create PieChart.
+     *
+     * @param dataset
+     * @return
+     */
     private static JFreeChart createChart(PieDataset dataset) {
         JFreeChart chart = ChartFactory.createPieChart("", dataset, false, false, false);
         return chart;
     }
 
+    /**
+     * Create the Bar.
+     *
+     * @param dataset
+     * @param style
+     * @return
+     */
     private static JFreeChart createBar(DefaultCategoryDataset dataset, String style) {
         if (style.equals("Date")) {
             JFreeChart chart = ChartFactory.createLineChart(
@@ -126,7 +168,9 @@ public class DashboardView extends JFrame {
                     false // URLs
             );
 
-            // Set the chart background color
+            /**
+             * Set the chart background color
+             */
             chart.setBackgroundPaint(Color.WHITE);
 
             // Customize the plot
@@ -135,7 +179,9 @@ public class DashboardView extends JFrame {
             plot.setDomainGridlinePaint(Color.GRAY);
             plot.setRangeGridlinePaint(Color.GRAY);
 
-            // Set the X-axis label to rotate 90 degrees
+            /**
+             * Set the X-axis label to rotate 90 degrees
+             */
             CategoryAxis xAxis = plot.getDomainAxis();
             xAxis.setTickLabelFont(xAxis.getTickLabelFont().deriveFont(11f));
             xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
@@ -167,6 +213,12 @@ public class DashboardView extends JFrame {
         return chart;
     }
 
+
+    /**
+     * Get 5 sites where the user spends the most time
+     * @throws IOException
+     * @throws SQLException
+     */
     private static void getMostvisitedSites() throws IOException, SQLException {
         mostVisited.clear();
         values = new double[2];
@@ -192,6 +244,12 @@ public class DashboardView extends JFrame {
         }
     }
 
+    /**
+     * Get data from the database.
+     *
+     * @param dataFromDb
+     * @param topFive
+     */
     private static void getTopFive(ArrayList<SiteHistory> dataFromDb, ArrayList<SiteHistory> topFive) {
         if (dataFromDb.size() >= 5) {
             for (int i = 0; i < 5; i++) {
@@ -218,6 +276,13 @@ public class DashboardView extends JFrame {
         }
     }
 
+
+    /**
+     * Find 5 days when the user spends more time on the internet
+     *
+     * @param data
+     * @return
+     */
     private static Map<String, Integer> getTopFiveDate(HashMap<String, Integer> data) {
         ArrayList<Map.Entry<String, Integer>> entryList = new ArrayList<>(data.entrySet());
         Collections.sort(entryList, Collections.reverseOrder(Map.Entry.comparingByValue()));

@@ -25,6 +25,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The type Dashboard database.
+ * A class to access to the database and get the data for the dashboard.
+ */
 public class DashboardDatabase {
     // ------------------------------------ All variables
     private static ArrayList<SiteHistory> listInfo = new ArrayList<>();
@@ -37,7 +41,10 @@ public class DashboardDatabase {
     private static String username = System.getProperty("user.name");
     private static String urlDatabase, query, databaseName;
 
-    // -------------------- Method to open connection
+    /**
+     * Sets conn.
+     */
+// -------------------- Method to open connection
     public static void setConn() {
         try {
             Conn = DriverManager.getConnection(Constant.getWindows().getDatabaseName());
@@ -47,12 +54,25 @@ public class DashboardDatabase {
         }
     }
 
-    // -------------------- Method to close the connection
+    /**
+     * Close.
+     *
+     * @throws SQLException the sql exception
+     */
+// -------------------- Method to close the connection
     public static void close() throws SQLException {
         Conn.close();
     }
 
-    // ------------------------------------------- Search chrome history
+    /**
+     * Chrome history array list.
+     * Search chrome history
+     *
+     * @param choice the choice
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<SiteHistory> ChromeHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -95,7 +115,15 @@ public class DashboardDatabase {
         return listInfo;
     }
 
-    // ------------------------------------------- Search Microsoft Edge history
+    /**
+     * Microsoft edge history array list.
+     * Search Microsoft Edge history
+     *
+     * @param choice the choice
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<SiteHistory> microsoftEdgeHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -137,7 +165,15 @@ public class DashboardDatabase {
         return listInfo;
     }
 
-    // ------------------------------------------- Search Firefox history
+    /**
+     * Firefox history array list.
+     * Search Firefox history
+     *
+     * @param choice the choice
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<SiteHistory> firefoxHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -182,6 +218,11 @@ public class DashboardDatabase {
     }
 
 
+    /**
+     * Get profile for the Firefox database location.
+     *
+     * @return
+     */
     private static String getProfile(){
         String profilePath = System.getProperty("user.home") + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\";
         File profileDir = new File(profilePath);
@@ -192,7 +233,9 @@ public class DashboardDatabase {
                 String profileName = profile.getName();
                 Path databasePath = Paths.get(profile.getAbsolutePath(), "places.sqlite");
 
-                // Check if the database file exists
+                /**
+                 * Check if the database file exists
+                 */
                 if (Files.exists(databasePath)) {
                     return profileName;
                 }
@@ -202,7 +245,15 @@ public class DashboardDatabase {
     }
 
 
-    // ------------------------------------------- Search Opera history
+    /**
+     * Opera history array list.
+     * Search Opera history
+     *
+     * @param choice the choice
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<SiteHistory> operaHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -244,7 +295,15 @@ public class DashboardDatabase {
         return listInfo;
     }
 
-    // ------------------------------------------- Search Vivaldi history
+    /**
+     * Vivaldi history array list.
+     * Search Vivaldi history
+     *
+     * @param choice the choice
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<SiteHistory> vivaldiHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -286,7 +345,15 @@ public class DashboardDatabase {
         return listInfo;
     }
 
-    // ------------------------------------------- Search Brave history
+    /**
+     * Brave history array list.
+     * Search Brave history
+     *
+     * @param choice the choice
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<SiteHistory> braveHistory(String choice) throws IOException, SQLException {
         listInfo.clear();
         Constant.getDates().clear();
@@ -328,9 +395,15 @@ public class DashboardDatabase {
         return listInfo;
     }
 
+    /**
+     * Convert time string.
+     * Getting the current system time and passing it and passing the long value in the Date class
+     *
+     * @param date the date
+     * @return the string
+     */
     public static String convertTime(String date) {
-        // Getting the current system time and passing it and passing the long value in
-        // the Date class
+
         if (date != null) {
             Timestamp ts = new Timestamp(Long.parseLong(date));
             Date newDate = new Date(ts.getTime());
@@ -345,7 +418,14 @@ public class DashboardDatabase {
         }
     }
 
-    // Copy the database (To avoid an error like "database is locked")
+    /**
+     * Copy database.
+     * Copy the database (To avoid an error like "database is locked")
+     *
+     * @param path the path
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static void copyDatabase(String path) throws IOException, SQLException {
         File source = new File(path);
         File destination = null;
@@ -365,7 +445,15 @@ public class DashboardDatabase {
     }
 
 
-    // ------------------------------------------- Search chrome history
+    /**
+     * Browser download array list.
+     * Search chrome history
+     *
+     * @param name the name
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<Downloads> browserDownload(String name) throws IOException, SQLException {
         downloadsData.clear();
         Browser browser = null;
@@ -419,7 +507,15 @@ public class DashboardDatabase {
     }
 
 
-    // ------------------------------------------- Search chrome history
+    /**
+     * Browser logins array list.
+     * Search chrome history
+     *
+     * @param name the name
+     * @return the array list
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static ArrayList<Login> browserLogins(String name) throws IOException, SQLException {
         loginData.clear();
         Browser browser = null;
@@ -473,7 +569,13 @@ public class DashboardDatabase {
         return loginData;
     }
 
-    // Copy the database (To avoid an error like "database is locked")
+    /**
+     * Copy login database.
+     *
+     * @param path the path
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static void copyLoginDatabase(String path) throws IOException, SQLException {
         File source = new File(path);
         File destination = null;
@@ -495,10 +597,14 @@ public class DashboardDatabase {
     }
 
 
+    /**
+     * Export data (CSV file).
+     *
+     * @param data the data
+     */
     public static void exportData(ArrayList<SiteHistory> data){
         if(data != null){
             String csvFile = "";
-            // Set the path and filename of the CSV file to create
             if(System.getProperty("os.name").contains(Constant.getWindows().getName())){
                 csvFile = "C:\\Users\\" + username + "\\Desktop\\" + "data.csv";
             } else if (OSName.contains(Constant.getLinux().getName())) {

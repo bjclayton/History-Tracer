@@ -8,40 +8,73 @@ import java.util.ArrayList;
 
 import Helper.DashboardDatabase;
 
+/**
+ * The type Linux history.
+ */
 public class LinuxHistory extends HistoryView {
 
-    // ------------------------------------------- Search chrome history
-    // ---------------------------------------
+    /**
+     * Search Chrome history.
+     *
+     * @param choice the choice
+     * @throws IOException
+     * @throws SQLException
+     */
     public void ChromeHistory(String choice) throws IOException, SQLException {
         showDetails(DashboardDatabase.ChromeHistory(choice));
     }
 
-    // ------------------------------------------- Search Microsoft Edge history
-    // ---------------------------------------
+    /**
+     * Search Microsoft Edge history.
+     *
+     * @param choice the choice
+     * @throws IOException
+     * @throws SQLException
+     */
     public void microsoftEdgeHistory(String choice) throws IOException, SQLException {
         showDetails(DashboardDatabase.microsoftEdgeHistory(choice));
     }
 
-    // ------------------------------------------- Search Firefox history
-    // ---------------------------------------
+    /**
+     * Search Firefox history.
+     *
+     * @param choice the choice
+     * @throws IOException
+     * @throws SQLException
+     */
     public void firefoxHistory(String choice) throws IOException, SQLException {
         showDetails(DashboardDatabase.firefoxHistory(choice));
     }
 
-    // ------------------------------------------- Search Opera history
-    // ---------------------------------------
+    /**
+     * Search Opera history.
+     *
+     * @param choice the choice
+     * @throws IOException
+     * @throws SQLException
+     */
     public void operaHistory(String choice) throws IOException, SQLException {
         showDetails(DashboardDatabase.operaHistory(choice));
     }
 
-    // ------------------------------------------- Search Vivaldi history
-    // ---------------------------------------
+    /**
+     * Search Vivaldi history.
+     *
+     * @param choice the choice
+     * @throws IOException
+     * @throws SQLException
+     */
     public void vivaldiHistory(String choice) throws IOException, SQLException {
         showDetails(DashboardDatabase.vivaldiHistory(choice));
     }
 
-    // ------------------------------------------- Search Brave history
-    // ---------------------------------------
+    /**
+     * Search Brave history.
+     *
+     * @param choice the choice
+     * @throws IOException
+     * @throws SQLException
+     */
     public void braveHistory(String choice) throws IOException, SQLException {
         showDetails(DashboardDatabase.braveHistory(choice));
     }

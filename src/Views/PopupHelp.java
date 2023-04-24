@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,16 +21,25 @@ import javax.swing.JPanel;
 
 import Helper.Constant;
 
+/**
+ * The type Popup help.
+ */
 public class PopupHelp extends JFrame {
+    /**
+     * The Panel.
+     */
     JPanel panel;
 
+    /**
+     * Instantiates a new Popup help.
+     */
     public PopupHelp(){
         setLayout(new GridBagLayout());
 
         // Create three JLabel components
         JLabel label1 = new JLabel("History Tracer v1.0", JLabel.CENTER);
         JLabel label2 = new JLabel("<html>Copyright © 2023 - Université Espoir de Calvary Chapel - Latremblay<html>", JLabel.CENTER);
-        JLabel label3 = new JLabel("https://uespoir.edu.ht/", JLabel.CENTER);
+        JLabel label3 = new JLabel("index.html", JLabel.CENTER);
 
         // Create a GridBagConstraints object
         GridBagConstraints gbc = new GridBagConstraints();
@@ -63,8 +73,8 @@ public class PopupHelp extends JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://uespoir.edu.ht/"));
-                } catch (IOException | URISyntaxException e1) {
+                    Desktop.getDesktop().open(new File("docs/index.html"));
+                } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
@@ -79,12 +89,12 @@ public class PopupHelp extends JFrame {
 
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
-                label3.setText("<html><a href=''>" + "https://uespoir.edu.ht/" + "</a></html>");
+                label3.setText("<html><a href=''>" + "index.html" + "</a></html>");
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
-                label3.setText("https://uespoir.edu.ht/");
+                label3.setText("index.html");
             }
             
         });
