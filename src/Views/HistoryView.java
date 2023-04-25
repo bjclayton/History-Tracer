@@ -459,29 +459,34 @@ public abstract class HistoryView extends JFrame {
      */
     public void decision(String browserSelected, String choice) throws IOException, SQLException {
         if (browserSelected.length() != 0) {
-            switch (browserSelected.trim()) {
-                case "Chrome":
-                    ChromeHistory(choice);
-                    break;
-                case "Microsoft Edge":
-                    microsoftEdgeHistory(choice);
-                    break;
-                case "Firefox":
-                    firefoxHistory(choice);
-                    break;
-                case "Opera":
-                    operaHistory(choice);
-                    break;
-                case "Vivaldi":
-                    vivaldiHistory(choice);
-                    break;
-                case "Brave":
-                    braveHistory(choice);
-                    break;
-                default:
-                    new DashboardView();
-                    break;
+            try{
+                switch (browserSelected.trim()) {
+                    case "Chrome":
+                        ChromeHistory(choice);
+                        break;
+                    case "Microsoft Edge":
+                        microsoftEdgeHistory(choice);
+                        break;
+                    case "Firefox":
+                        firefoxHistory(choice);
+                        break;
+                    case "Opera":
+                        operaHistory(choice);
+                        break;
+                    case "Vivaldi":
+                        vivaldiHistory(choice);
+                        break;
+                    case "Brave":
+                        braveHistory(choice);
+                        break;
+                    default:
+                        new DashboardView();
+                        break;
+                }
+            }catch (Exception e){
+
             }
+
         }
     }
 
