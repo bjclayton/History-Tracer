@@ -33,6 +33,11 @@ GIF created with `LiceCap`.
 * JCommon
 
 
+## Usage
+To test the application, you must:
+* Clone repository
+* Run the main file
+
 ## License
 
     Copyright [2023] [John Clayton - UEspoir]
