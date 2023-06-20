@@ -36,7 +36,7 @@ GIF created with `LiceCap`.
 ## Usage
 To test the application, you must:
 * Clone repository
-* Run the main file
+* Run the main file `Main.java`
 
 ## License
 
