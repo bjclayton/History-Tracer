@@ -33,10 +33,9 @@ GIF created with `LiceCap`.
 * JCommon
 
 
-## Usage
-To test the application, you must:
+## Usage (To use the application)
 * Clone repository
-* Run the main file `Main.java`
+* Run the main `Main.java` file in the src folder
 
 ## License
 
