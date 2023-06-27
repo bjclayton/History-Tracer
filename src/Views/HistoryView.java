@@ -1,5 +1,6 @@
 package Views;
 
+import Helper.DashboardDatabase;
 import Models.TreeNode;
 import Models.Downloads;
 import Models.Login;
@@ -16,8 +17,10 @@ import Helper.Constant;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -46,6 +49,7 @@ public abstract class HistoryView extends JFrame {
     private JTree tree;
     private DefaultMutableTreeNode root;
     private static String  browserSelected = "";
+    private static String  CurrentTable = "urls";
     private static int row, column;
     private static ArrayList<SiteHistory> sites;
     private static ArrayList<Login> logins;
@@ -56,6 +60,7 @@ public abstract class HistoryView extends JFrame {
     private final JButton sellectAll = new JButton("Select All", new ImageIcon(Constant.getIcons().getIconSelectAll()));
     private final JButton sort = new JButton("Sort By", new ImageIcon(Constant.getIcons().getIconSort()));
     private final JButton more = new JButton("More", new ImageIcon(Constant.getIcons().getIconMore()));
+    private final JButton delete = new JButton("Delete", new ImageIcon(Constant.getIcons().getIconDelete()));
 
 
     /**
@@ -260,7 +265,7 @@ public abstract class HistoryView extends JFrame {
      */
     public void Menu() {
         barre.setFloatable(false);
-        // put text on bottom of theses buttons
+        // put text on bottom of these buttons
         copy.setVerticalTextPosition(JButton.BOTTOM);
         copy.setHorizontalTextPosition(JButton.CENTER);
         refresh.setVerticalTextPosition(JButton.BOTTOM);
@@ -269,12 +274,17 @@ public abstract class HistoryView extends JFrame {
         sellectAll.setVerticalTextPosition(JButton.BOTTOM);
         sellectAll.setHorizontalTextPosition(JButton.CENTER);
 
+        delete.setVerticalTextPosition(JButton.BOTTOM);
+        delete.setHorizontalTextPosition(JButton.CENTER);
+
         // add button to toolbar
         barre.add(refresh);
         barre.addSeparator(); // add a separator on the toolbar
         barre.add(copy);
         barre.addSeparator();
         barre.add(sellectAll);
+        barre.addSeparator();
+        barre.add(delete);
 
         sort.setVerticalTextPosition(JButton.BOTTOM);
         sort.setHorizontalTextPosition(JButton.CENTER);
@@ -499,6 +509,11 @@ public abstract class HistoryView extends JFrame {
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 row = table.rowAtPoint(e.getPoint());
                 column = table.columnAtPoint(e.getPoint());
+
+                if (e.getClickCount() == 1){
+                    row = table.rowAtPoint(e.getPoint());
+                    column = table.columnAtPoint(e.getPoint());
+                }
             }
         });
 
@@ -576,6 +591,9 @@ public abstract class HistoryView extends JFrame {
                     PopupDetail.setTxtUrl(history.getUrl());
                     PopupDetail.setTxtTime(convertTime(history.getVisitTime()));
                     PopupDetail.setTxtVisitCount(String.valueOf(history.getVisitCount()));
+                } else if (e.getClickCount() == 1) {
+                    row = table.rowAtPoint(e.getPoint());
+                    CurrentTable = "urls";
                 }
             }
         });
@@ -661,6 +679,29 @@ public abstract class HistoryView extends JFrame {
             }
         };
 
+        /**
+         * Add mouse click when use select a row to display more details
+         */
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+                if(e.getClickCount() == 2){
+                    new PopupDetailDownloads(); // Call popup detail
+                    row = table.rowAtPoint(e.getPoint());
+                    column = table.columnAtPoint(e.getPoint());
+
+                    Downloads downloadsModel = downloads.get(row);
+                    PopupDetailDownloads.setTxtReferrer(downloadsModel.getReferrer());
+                    PopupDetailDownloads.setTxtCurrentPath(downloadsModel.getCurrent_path());
+                    PopupDetailDownloads.setTxtTotalBytes(downloadsModel.getTotal_bytes());
+                }else if (e.getClickCount() == 1) {
+                    row = table.rowAtPoint(e.getPoint());
+                    CurrentTable = "downloads";
+                }
+
+            }
+        });
+
 
         table.setShowGrid(false);
         table.setShowHorizontalLines(false);
@@ -722,6 +763,27 @@ public abstract class HistoryView extends JFrame {
                 return false;
             }
         };
+
+        /**
+         * Add mouse click when use select a row to display more details
+         */
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+                if(e.getClickCount() == 2){
+                    new PopupDetailLogins(); // Call popup detail
+                    row = table.rowAtPoint(e.getPoint());
+                    column = table.columnAtPoint(e.getPoint());
+
+                    Login loginModel = logins.get(row);
+                    PopupDetailLogins.setTxtUrl(loginModel.getUrl());
+                    PopupDetailLogins.setTxtUsername(loginModel.getUsername());
+                } else if (e.getClickCount() == 1) {
+                    row = table.rowAtPoint(e.getPoint());
+                    CurrentTable = "logins";
+                }
+            }
+        });
 
 
         table.setShowGrid(false);
@@ -911,6 +973,42 @@ public abstract class HistoryView extends JFrame {
     }
 
     /**
+     * Checks if a process is currently running.
+     *
+     * @param processName the name of the process to check
+     * @return true if the process is running, false otherwise
+     */
+    private static boolean isProcessRunning(String processName) {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
+            Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains(processName)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Closes a running process.
+     *
+     * @param processName the name of the process to close
+     */
+    private static void closeProcess(String processName) {
+        try {
+            Runtime.getRuntime().exec("taskkill /F /IM " + processName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Button toolbar action (Sort, SelectAll, Copy, ...).
      * When user click button on the toolbar
      */
@@ -935,6 +1033,52 @@ public abstract class HistoryView extends JFrame {
             }
         });
 
+        /**
+         * Button More Delete
+         */
+        delete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String msg = String.format("This action will close %s if it is already open\nAre you sure?", browserSelected);
+                int option = JOptionPane.showConfirmDialog(rootPane,msg);
+                if( option == JOptionPane.YES_OPTION){
+                    String processName = browserSelected.toLowerCase();
+
+                    if (processName.equals("microsoft edge")) {
+                        processName = "msedge.exe";
+                    }else {
+                        processName = String.format("%s.exe", processName);
+                    }
+
+                    if (isProcessRunning(processName)) {
+                        closeProcess(processName);
+                    } else {
+                        System.out.println(processName + " is not running.");
+                    }
+
+                    mousePosition();
+
+                    try {
+                        if (CurrentTable.equals("logins") && logins.size()  != 0) {
+                            Login login = logins.get(row);
+                            DashboardDatabase.deleteData(browserSelected, login);
+                            browserLogins(browserSelected);
+                        } else if (CurrentTable.equals("downloads") && downloads.size() != 0) {
+                            Downloads download = downloads.get(row);
+                            DashboardDatabase.deleteData(browserSelected, download);
+                            browserDownload(browserSelected);
+                        }else {
+                            if(sites.size() != 0){
+                                SiteHistory history = sites.get(row);
+                                DashboardDatabase.deleteData(browserSelected, history);
+                                decision(browserSelected, "Display");
+                            }
+                        }
+                    } catch (IOException | SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
 
         /**
          * Button SelectAll action
