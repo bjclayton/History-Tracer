@@ -191,8 +191,9 @@ public class SplashScreen extends JFrame {
                     settings.get("iconRefresh").toString(),
                     settings.get("iconSelectAll").toString(),
                     settings.get("loadGif").toString(),
-                    settings.get("iconMore").toString()
-                    ));
+                    settings.get("iconMore").toString(),
+                    settings.get("iconDelete").toString()
+            ));
 
             settings = getInfo("table");
             Constant.setTable(new Table(fromJsonAray(settings.get("tableSite")),

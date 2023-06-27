@@ -10,6 +10,8 @@ import Models.Browser;
 import Models.Downloads;
 import Models.Login;
 import Models.SiteHistory;
+import org.jfree.data.statistics.HistogramBin;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.io.BufferedWriter;
@@ -44,7 +46,6 @@ public class DashboardDatabase {
     /**
      * Sets conn.
      */
-// -------------------- Method to open connection
     public static void setConn() {
         try {
             Conn = DriverManager.getConnection(Constant.getWindows().getDatabaseName());
@@ -59,7 +60,6 @@ public class DashboardDatabase {
      *
      * @throws SQLException the sql exception
      */
-// -------------------- Method to close the connection
     public static void close() throws SQLException {
         Conn.close();
     }
@@ -642,6 +642,91 @@ public class DashboardDatabase {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    /**
+     * Delete a row in the database
+     *
+     * @param name the name
+     * @param name the option
+     * @return void
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
+    public static void deleteData(String name, Object obj) throws IOException, SQLException {
+        Browser browser = null;
+
+        switch (name) {
+            case "Chrome":
+                browser = Constant.getChrome();
+                break;
+            case "Microsoft Edge":
+                browser = Constant.getMicrosoftEdge();
+                break;
+            case "Opera":
+                browser = Constant.getOpera();
+                break;
+            case "Vivaldi":
+                browser = Constant.getVivaldi();
+                break;
+            case "Brave":
+                browser = Constant.getBrave();
+                break;
+            default:
+                browser = Constant.getFirefox();
+                break;
+        }
+
+        if(!name.equals("Firefox")){
+
+            Constant.setBrowser(browser);
+
+            try {
+                close();
+                Conn = DriverManager.getConnection("jdbc:sqlite:"  + String.format(Constant.getBrowser().getDatabasePath(), username));
+
+                if (obj instanceof Downloads) {
+                    query = String.format(Constant.getBrowser().getSqlCommand().get(5), ((Downloads) obj).getReferrer(), ((Downloads) obj).getTotal_bytes());
+                } else if (obj instanceof  Login) {
+                    Conn = DriverManager.getConnection("jdbc:sqlite:"  + String.format(Constant.getBrowser().getLoginDatabasePath(), username));
+                    query = String.format(Constant.getBrowser().getSqlCommand().get(6), ((Login) obj).getUrl(), ((Login) obj).getUsername());
+
+                    stmt = Conn.createStatement();
+                    stmt.executeUpdate(query);
+                    copyLoginDatabase(String.format(Constant.getBrowser().getLoginDatabasePath(), username));
+                }else {
+                    query = String.format(Constant.getBrowser().getSqlCommand().get(4), ((SiteHistory) obj).getTitle(), ((SiteHistory) obj).getUrl());
+                }
+
+                stmt = Conn.createStatement();
+                stmt.executeUpdate(query);
+                copyDatabase(String.format(Constant.getBrowser().getDatabasePath(), username));
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            close();
+        }else {
+            Constant.setBrowser(browser);
+
+            try {
+                close();
+                Conn = DriverManager.getConnection("jdbc:sqlite:"  + String.format(Constant.getBrowser().getDatabasePath(), username, getProfile()));
+
+                if (obj instanceof SiteHistory) {
+                    query = String.format(Constant.getBrowser().getSqlCommand().get(2), ((SiteHistory) obj).getVisitCount(), ((SiteHistory) obj).getUrl());
+                    stmt = Conn.createStatement();
+                    stmt.executeUpdate(query);
+                    copyDatabase(String.format(Constant.getBrowser().getDatabasePath(), username, getProfile()));
+                }
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            close();
         }
     }
 }

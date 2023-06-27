@@ -4,7 +4,7 @@ package Models;
  * The type Icons (model).
  */
 public class Icons {
-    private String iconApp, iconCopy, iconSort, iconRefresh, iconSelectAll, loadGif, iconMore;
+    private String iconApp, iconCopy, iconSort, iconRefresh, iconSelectAll, loadGif, iconMore, iconDelete;
 
     /**
      * Instantiates a new Icons.
@@ -16,8 +16,9 @@ public class Icons {
      * @param iconSelectAll the icon select all
      * @param loadGif       the load gif
      * @param iconMore      the icon more
+     * @param iconDelete    the icon delete
      */
-    public Icons(String iconApp, String iconCopy, String iconSort, String iconRefresh, String iconSelectAll, String loadGif, String iconMore) {
+    public Icons(String iconApp, String iconCopy, String iconSort, String iconRefresh, String iconSelectAll, String loadGif, String iconMore, String iconDelete) {
         this.iconApp = iconApp;
         this.iconCopy = iconCopy;
         this.iconSort = iconSort;
@@ -25,6 +26,7 @@ public class Icons {
         this.iconSelectAll = iconSelectAll;
         this.loadGif = loadGif;
         this.iconMore = iconMore;
+        this.iconDelete = iconDelete;
     }
 
 
@@ -154,5 +156,23 @@ public class Icons {
      */
     public void setIconMore(String iconMore) {
         this.iconMore = iconMore;
+    }
+
+    /**
+     * Gets icon delete.
+     *
+     * @return the icon delete
+     */
+    public String getIconDelete() {
+        return iconDelete;
+    }
+
+    /**
+     * Sets icon delete.
+     *
+     * @param iconDelete the icon delete
+     */
+    public void setIconDelete(String iconDelete) {
+        this.iconDelete = iconDelete;
     }
 }
