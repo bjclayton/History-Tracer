@@ -12,6 +12,7 @@ The following functionality is completed:
 - [x] It will display all the files downloaded by the user.
 - [x] The system establishes detailed reports on the digital presence of the user.
 - [x] The user can enter texts to carry out research.
+- [x] The user can delete a row.
 - [x] Online help, FAQ customer support will be made available to the user.
 
 
