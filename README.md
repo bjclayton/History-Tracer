@@ -40,5 +40,5 @@ GIF created with `LiceCap`.
 
 ## License
 
-    Copyright [2023] [John Clayton - UEspoir]
+    Copyright 2023
 
